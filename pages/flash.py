@@ -17,7 +17,8 @@ edited_df = st.data_editor(df)
 neqsim_fluid = fluid_df(edited_df, True)
 
 if st.button('Create Fluid'):
-    neqsim_fluid = fluid_df(edited_df, False)
+    global neqsim_fluid
+    neqsim_fluid = fluid_df(edited_df, False).autoSelectModel()
     st.success('Fluid created successfully!')
 
 # Inputs for temperature and pressure
