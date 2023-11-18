@@ -15,7 +15,7 @@ default_data = {
 
 df = pd.DataFrame(default_data)
 
-st.edited_df = st.data_editor(df)
+st.edited_df = st.data_editor(df, num_rows='dynamic')
 
 if st.button('Create'):
     st.neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=False).autoSelectModel()
