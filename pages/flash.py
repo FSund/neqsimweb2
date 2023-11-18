@@ -14,8 +14,6 @@ default_data = {
 df = pd.DataFrame(default_data)
 edited_df = st.data_editor(df)
 
-neqsim_fluid = fluid_df(edited_df, True)
-
 if st.button('Create Fluid'):
     global neqsim_fluid
     neqsim_fluid = fluid_df(edited_df, False).autoSelectModel()
