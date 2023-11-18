@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 import neqsim
-from neqsim.thermo.thermoTools import fluid_df, TPflash, dataFrame
+from neqsim.thermo.thermoTools import fluidcreator, fluid_df, TPflash, dataFrame
+
+st.title('Create Fluid')
 
 # Sample data for the DataFrame
 default_data = {
@@ -12,29 +14,9 @@ default_data = {
 }
 
 df = pd.DataFrame(default_data)
-edited_df = st.data_editor(df)
 
-if st.button('Create Fluid'):
-    global neqsim_fluid
-    neqsim_fluid = fluid_df(edited_df, False).autoSelectModel()
-    st.success('Fluid created successfully!')
+st.edited_df = st.data_editor(df)
 
-# Inputs for temperature and pressure
-temp = st.number_input("Temperature (K)", min_value=0.0, value=298.15)  # Default 298.15 K
-pressure = st.number_input("Pressure (bar)", min_value=0.0, value=1.0)  # Default 1 bar
-
-if st.button('Perform TPflash'):
-    neqsim_fluid.setPressure(pressure)
-    neqsim_fluid.setTemperature(temp)
-    TPflash(neqsim_fluid)
-    st.success('Flash created successfully!')
-    # Display the DataFrame using st.table
-    st.subheader("Results Table:")
-    results_df = st.data_editor(dataFrame(neqsim_fluid))
-    
-
-
-
-
-
-
+if st.button('Create'):
+    st.neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=False).autoSelectModel()
+    st.success('Successfully created fluid')
