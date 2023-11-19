@@ -3,7 +3,7 @@ import pandas as pd
 import neqsim
 from neqsim.thermo.thermoTools import fluidcreator, fluid_df, TPflash, dataFrame
 
-st.title('TP Flash Calculator')
+st.title('Flash')
 
 # Inputs for temperature and pressure
 temp = st.number_input("Temperature (C)", min_value=0.0, value=20.0)  # Default 20.0 C
