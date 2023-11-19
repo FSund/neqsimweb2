@@ -5,9 +5,9 @@ import streamlit as st
 
 st.image('images/neqsimlogocircleflat.png', width=150)
 
-"""
-# Welcome to NeqSim!
+st.write("# Welcome to NeqSim! 👋")
 
+"""
 NeqSim is a library for calculation of fluid behavior, phase equilibrium and process simulation. This this project is a collectiomn of Streamlit models using neqsim for simulation.The method documentation for the models found in this application can be found in [Introduction to Gas Processing using NeqSim in Colab](https://colab.research.google.com/github/EvenSol/NeqSim-Colab/blob/master/notebooks/examples_of_NeqSim_in_Colab.ipynb).
 
 ## NeqSim project in GitHub

@@ -5,12 +5,6 @@ import streamlit as st
 import neqsim
 from neqsim.thermo import fluid, TPflash
 
-
-"""
-# Create a NeqSim fluid
-
-"""
-
 st.title('Methane Density Calculator')
 
 temperature = st.number_input('Temperature (°C)', value=20.0)
@@ -26,7 +20,7 @@ if calculate_button:
 
     # Perform a TP flash calculation
     TPflash(methane_fluid)
-
+    methane_fluid.initProperties()
     # Calculate and display density
     density = methane_fluid.getDensity('kg/m3')
-    st.write(f'Density of Methane: {density:.2f} kg/m³')
+    st.write(f'Average density of fluid: {density:.2f} kg/m³')
