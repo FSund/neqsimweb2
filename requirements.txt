@@ -2,3 +2,4 @@ neqsim
 altair
 pandas
 streamlit
+matplotlib
