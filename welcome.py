@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+st.set_page_config(page_title="NeqSim", page_icon='images/neqsimlogocircleflat.png')
+
 st.image('images/neqsimlogocircleflat.png', width=150)
 
 st.write("# Welcome to NeqSim! 👋")
