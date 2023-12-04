@@ -10,7 +10,7 @@ temp = st.number_input("Temperature (C)", min_value=0.0, value=20.0)  # Default 
 pressure = st.number_input("Pressure (bara)", min_value=0.0, value=1.0)  # Default 1 bara
 
 if st.button('Run'):
-    neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=False).autoSelectModel()
+    neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=False, add_all_components=False).autoSelectModel()
     neqsim_fluid.setPressure(pressure, 'bara')
     neqsim_fluid.setTemperature(temp, 'C')
     TPflash(neqsim_fluid)
