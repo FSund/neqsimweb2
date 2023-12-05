@@ -1,27 +1,24 @@
-# First
-import openai 
 import streamlit as st
-with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
-    "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
-    "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
-    "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
+import openai
+from openai import OpenAI
+#client = OpenAI()
 
-st.title("💬 Chatbot") if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+API_KEY = st.secrets["apipas"]
+OpenAI.api_key = API_KEY
+client = OpenAI(api_key=API_KEY)
 
-for msg in st.session_state.messages:
-    st.chat_message(msg["role"]).write(msg["content"])
-
-if prompt := st.chat_input():
-    if not openai_api_key:
-        st.info("Please add your OpenAI API key to continue.")
-        st.stop()
-
-    openai.api_key = openai_api_key
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user").write(prompt)
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
-    msg = response.choices[0].message
-    st.session_state.messages.append(msg)
-    st.chat_message("assistant").write(msg.content)
+def make_request(question_input: str):
+    try:
+        completion = client.completions.create(
+        model="gpt-3.5-turbo-instruct",
+        prompt=question_input,
+        max_tokens=200,
+        temperature=0
+        )
+        return completion.choices[0].text
+    except:
+        return ""
+    
+st.question = make_request
+test = make_request("what is neqsim")
+st.write(test)
