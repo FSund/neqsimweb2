@@ -3,11 +3,9 @@ import openai
 from openai import OpenAI
 #client = OpenAI()
 
-API_KEY = '...'
+API_KEY = st.secrets["apipas"]
 OpenAI.api_key = API_KEY
 client = OpenAI(api_key=API_KEY)
-
-
 
 def make_request(question_input: str):
     try:
