@@ -59,5 +59,5 @@ if st.button('Run'):
     st.divider()
     st.write('dew points')
     st.data_editor(dewdatapoints)
-    st.write('dew points')
+    st.write('bubble points')
     st.data_editor(bubdatapoints)
