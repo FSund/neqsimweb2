@@ -36,3 +36,9 @@ if st.button('Run'):
     st.success('Flash finished successfully!')
     st.subheader("Results:")
     results_df = st.data_editor(dataFrame(neqsim_fluid))
+    st.divider()
+    #compnames = ','.join(neqsim_fluid.getComponentNames())
+    input = "give sources for equilibrium data for ", str(neqsim_fluid.getComponentNames()[0])
+    openapitext = st.question(input)
+    st.write(openapitext)
+
