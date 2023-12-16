@@ -3,6 +3,8 @@ import pandas as pd
 import neqsim
 from neqsim.thermo.thermoTools import fluidcreator, fluid_df, TPflash, dataFrame
 
+pd.set_option('display.float_format', '{:.2E}'.format)
+
 st.title('TP flash')
 st.divider()
 
@@ -17,8 +19,24 @@ default_data = {
 }
 
 df = pd.DataFrame(default_data)
+st.edited_df = st.data_editor(
+    df,
+    column_config={
+        "ComponentName": "ComponentName",  # change the title
+        "MolarComposition[-]": st.column_config.NumberColumn(
+            "MolarComposition[-]", min_value=0, max_value=1.0, format="%f"
+        ),
+        "MolarMass[kg/mol]'": st.column_config.NumberColumn(
+            "MolarMass[kg/mol]", min_value=1, max_value=10000, format="%f kg/mol"
+        ),
+        "Density[gr/cm3]": st.column_config.NumberColumn(
+            "Density[gr/cm3]", min_value=1e-10, max_value=10.0, format="%f gr/cm3"
+        ),
+    },
+num_rows='dynamic')
 
-st.edited_df = st.data_editor(df, num_rows='dynamic')
+#st.write(df.style.format("{:.2}"))
+#st.edited_df = st.data_editor(df, num_rows='dynamic')
 
 st.text("Fluid composition will be normalized before simulation")
 
