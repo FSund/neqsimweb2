@@ -54,6 +54,6 @@ if st.button('Run'):
     result_string = delimiter.join(string_list)
     delimiter = ", "
     result_string = delimiter.join(string_list)
-    input = "what scientific experimental equilibrium data are available for " + result_string + " at temperature " + temp + " Celcius and " + pressure + " bara"  
+    input = "what scientific experimental equilibrium data are available for " + result_string + " at temperature " + str(temp) + " Celcius and " + str(pressure) + " bara"  
     openapitext = st.question(input)
     st.write(openapitext)
