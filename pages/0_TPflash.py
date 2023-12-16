@@ -52,6 +52,6 @@ if st.button('Run'):
     result_string = delimiter.join(string_list)
     delimiter = ", "
     result_string = delimiter.join(string_list)
-    input = "How good is the " + str(neqsim_fluid.getModelName()) + " thermodynamic model for calculation of phase equilibrium and what scientific experimental equilibrium data are available for mixtures of " + result_string + " at temperature around " + str(temp) + " Celcius and pressure around " + str(pressure) + " bar. Give links to published articles."  
+    input = "What scientific experimental equilibrium data are available for mixtures of " + result_string + " at temperature around " + str(temp) + " Celcius and pressure around " + str(pressure) + " bar. Give links to published articles."  
     openapitext = st.question(input)
     st.write(openapitext)
