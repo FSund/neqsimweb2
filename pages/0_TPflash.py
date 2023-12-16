@@ -21,7 +21,6 @@ st.edited_df = st.data_editor(
     column_config={
         "ComponentName": "Component Name",
         "MolarComposition[-]": st.column_config.NumberColumn(
-            "Molar Composition [-]", min_value=0, max_value=100.0, format="%f"
         ),
         "MolarMass[kg/mol]": st.column_config.NumberColumn(
             "Molar Mass [kg/mol]", min_value=1, max_value=10000, format="%f kg/mol"
@@ -46,7 +45,6 @@ if st.button('Run'):
     st.subheader("Results:")
     results_df = st.data_editor(dataFrame(neqsim_fluid))
     st.divider()
-
     list1 = neqsim_fluid.getComponentNames()
     l1 = list(list1)
     string_list = [str(element) for element in l1]
@@ -54,6 +52,6 @@ if st.button('Run'):
     result_string = delimiter.join(string_list)
     delimiter = ", "
     result_string = delimiter.join(string_list)
-    input = "what scientific experimental equilibrium data are available for mixtures of s" + result_string + " at temperature around " + str(temp) + " Celcius and pressure around " + str(pressure) + " bar"  
+    input = "How good is the " + str(neqsim_fluid.getModelName()) + " for calculation of equilibrium and what scientific experimental equilibrium data are available for mixtures of s" + result_string + " at temperature around " + str(temp) + " Celcius and pressure around " + str(pressure) + " bar"  
     openapitext = st.question(input)
     st.write(openapitext)
