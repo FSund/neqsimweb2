@@ -14,7 +14,7 @@ def make_request(question_input: str):
         completion = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt=question_input,
-        max_tokens=200,
+        max_tokens=500,
         temperature=0
         )
         return completion.choices[0].text
