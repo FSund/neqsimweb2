@@ -2,6 +2,24 @@ import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
+import openai
+from openai import OpenAI
+
+API_KEY = st.secrets["apipas"]
+OpenAI.api_key = API_KEY
+client = OpenAI(api_key=API_KEY)
+
+def make_request(question_input: str):
+    try:
+        completion = client.completions.create(
+        model="gpt-3.5-turbo-instruct",
+        prompt=question_input,
+        max_tokens=200,
+        temperature=0
+        )
+        return completion.choices[0].text
+    except:
+        return ""
 
 st.set_page_config(page_title="NeqSim", page_icon='images/neqsimlogocircleflat.png')
 
@@ -23,4 +41,10 @@ Questions related to use and development are asked on the [NeqSim github discuss
 ## How to use this application
 Use right menu to select operations
 
+
+## NeqSim Chatbot
+NeqSim Streamlit is integrated with OpenAI, and will provide information related to the simulations.
 """
+st.question = make_request
+test = make_request("what is neqsim")
+st.write(test)
