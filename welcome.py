@@ -5,11 +5,15 @@ import streamlit as st
 import openai
 from openai import OpenAI
 
-API_KEY = st.secrets["apipas"]
-OpenAI.api_key = API_KEY
-client = OpenAI(api_key=API_KEY)
+
 
 def make_request(question_input: str):
+    try:
+        API_KEY = st.secrets["apipas"]
+        OpenAI.api_key = API_KEY
+        client = OpenAI(api_key=API_KEY)
+    except:
+        st.write('no OPENAI key given..')
     try:
         completion = client.completions.create(
         model="gpt-3.5-turbo-instruct",
@@ -45,6 +49,3 @@ Use right menu to select operations
 ## NeqSim Chatbot
 NeqSim Streamlit is integrated with OpenAI, and will provide information related to the simulations.
 """
-st.question = make_request
-test = make_request("what is neqsim")
-st.write(test)
