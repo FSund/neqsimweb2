@@ -45,7 +45,6 @@ if st.button('Run'):
     st.success('Hydrate calculation finished successfully!')
     st.text("Hydrate temperature " +str(round(neqsim_fluid.getTemperature('C'), 2)) + " [C]")
     st.subheader("Results:")
-    res = "Hydrate temperature "+ str(neqsim_fluid.getTemperature('C'))+ 'C'
     results_df = st.data_editor(dataFrame(neqsim_fluid))
     st.divider()
     list1 = neqsim_fluid.getComponentNames()
