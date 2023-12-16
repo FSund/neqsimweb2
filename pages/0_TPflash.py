@@ -46,6 +46,14 @@ if st.button('Run'):
     st.subheader("Results:")
     results_df = st.data_editor(dataFrame(neqsim_fluid))
     st.divider()
-    input = "give sources for equilibrium data for ", str(neqsim_fluid.getComponentNames()[0])
+
+    list1 = neqsim_fluid.getComponentNames()
+    l1 = list(list1)
+    string_list = [str(element) for element in l1]
+    delimiter = ", "
+    result_string = delimiter.join(string_list)
+    delimiter = ", "
+    result_string = delimiter.join(string_list)
+    input = "what scientific experimental equilibrium data are available for mixtures of components ", result_string
     openapitext = st.question(input)
     st.write(openapitext)
