@@ -19,15 +19,15 @@ df = pd.DataFrame(default_data)
 st.edited_df = st.data_editor(
     df,
     column_config={
-        "ComponentName": "ComponentName",
+        "ComponentName": "Component Name",
         "MolarComposition[-]": st.column_config.NumberColumn(
-            "MolarComposition[-]", min_value=0, max_value=100.0, format="%f"
+            "Molar Composition [-]", min_value=0, max_value=100.0, format="%f"
         ),
-        "MolarMass[kg/mol]'": st.column_config.NumberColumn(
-            "MolarMass[kg/mol]", min_value=1, max_value=10000, format="%f kg/mol"
+        "MolarMass[kg/mol]": st.column_config.NumberColumn(
+            "Molar Mass [kg/mol]", min_value=1, max_value=10000, format="%f kg/mol"
         ),
-        "Density[gr/cm3]": st.column_config.NumberColumn(
-            "Density[gr/cm3]", min_value=1e-10, max_value=10.0, format="%f gr/cm3"
+        "RelativeDensity[-]": st.column_config.NumberColumn(
+            "Density [gr/cm3]", min_value=1e-10, max_value=10.0, format="%f gr/cm3"
         ),
     },
 num_rows='dynamic')
