@@ -51,7 +51,7 @@ if st.button('Run'):
     st.pyplot(fig)
     st.divider()
     cricobar = thermoOps.getOperation().get("cricondenbar")[1]
-    st.write('cricondenbar ', cricobar, ' bara')
+    st.write('cricondenbar ', round(cricobar,2), ' bara')
     dewdatapoints = pd.DataFrame(
     {'dew temperatures': dewts,
      'dew pressures':dewps,
