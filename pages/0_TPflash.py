@@ -7,13 +7,20 @@ from fluids import default_fluid
 st.title('TP flash')
 st.divider()
 st.text("Set fluid composition:")
-df = pd.DataFrame(default_fluid)
+
+if 'activefluid_df' not in st.session_state:
+   activefluid_df = pd.DataFrame(default_fluid)
+
+hidecomponents = st.checkbox('Show active components')
+
+if hidecomponents:
+    activefluid_df =  st.edited_df[st.edited_df['MolarComposition[-]'] > 0]
+
 st.edited_df = st.data_editor(
-    df,
+    activefluid_df,
     column_config={
         "ComponentName": "Component Name",
-        "MolarComposition[-]": st.column_config.NumberColumn(
-        ),
+        "MolarComposition[-]": st.column_config.NumberColumn("Molar Composition [-]", min_value=0, max_value=10000, format="%f"),
         "MolarMass[kg/mol]": st.column_config.NumberColumn(
             "Molar Mass [kg/mol]", min_value=0, max_value=10000, format="%f kg/mol"
         ),
