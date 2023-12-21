@@ -4,29 +4,35 @@ import neqsim
 from neqsim.thermo import fluid_df, phaseenvelope, TPflash, dataFrame
 from neqsim import jNeqSim
 import matplotlib.pyplot as plt
+from fluids import detailedHC_data
 
 st.title('Phase Envelope')
 
-st.divider()
-
 st.text("Set fluid composition:")
-
 # Sample data for the DataFrame
-default_data = {
-    'ComponentName':  ["CO2", "methane", "ethane", "propane", "i-butane", "n-butane"],
-    'MolarComposition[-]':  [0.01, 0.2, 0.1, 0.01, 0.01, 0.01],
-}
 
-df = pd.DataFrame(default_data)
-
-st.edited_df = st.data_editor(df, num_rows='dynamic')
+df = pd.DataFrame(detailedHC_data)
+st.edited_df = st.data_editor(
+    df,
+    column_config={
+        "ComponentName": "Component Name",
+        "MolarComposition[-]": st.column_config.NumberColumn(
+        ),
+        "MolarMass[kg/mol]": st.column_config.NumberColumn(
+            "Molar Mass [kg/mol]", min_value=0, max_value=10000, format="%f kg/mol"
+        ),
+        "RelativeDensity[-]": st.column_config.NumberColumn(
+            "Density [gr/cm3]", min_value=1e-10, max_value=10.0, format="%f gr/cm3"
+        ),
+    },
+num_rows='dynamic')
+isplusfluid = st.checkbox('Plus Fluid')
 
 st.text("Fluid composition will be normalized before simulation")
-
 st.divider()
 
 if st.button('Run'):
-    neqsim_fluid = fluid_df(st.edited_df).setModel("UMR-PRU-EoS")
+    neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).setModel("UMR-PRU-EoS")
     st.success('Successfully created fluid')
     st.subheader("Results:")
     thermoOps = jNeqSim.thermodynamicOperations.ThermodynamicOperations(neqsim_fluid)
@@ -45,7 +51,7 @@ if st.button('Run'):
     st.pyplot(fig)
     st.divider()
     cricobar = thermoOps.getOperation().get("cricondenbar")[1]
-    st.write('cricondenbar ', cricobar, ' bara')
+    st.write('cricondenbar ', round(cricobar,2), ' bara')
     dewdatapoints = pd.DataFrame(
     {'dew temperatures': dewts,
      'dew pressures':dewps,
@@ -59,5 +65,5 @@ if st.button('Run'):
     st.divider()
     st.write('dew points')
     st.data_editor(dewdatapoints)
-    st.write('dew points')
+    st.write('bubble points')
     st.data_editor(bubdatapoints)

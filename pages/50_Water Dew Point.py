@@ -4,7 +4,7 @@ import neqsim
 from neqsim.thermo.thermoTools import fluidcreator, fluid_df, TPflash, dataFrame
 from fluids import default_fluid
 
-st.title('TP flash')
+st.title('Water Dew Point')
 st.divider()
 st.text("Set fluid composition:")
 
@@ -33,23 +33,23 @@ isplusfluid = st.checkbox('Plus Fluid')
 
 st.text("Fluid composition will be normalized before simulation")
 st.divider()
-temp = st.number_input("Temperature (C)", min_value=-273.15, value=20.0)  # Default 20.0 C
-pressure = st.number_input("Pressure (bara)", min_value=0.0, value=1.0)  # Default 1 bara
 
-if st.button('Run'):
+input_data = st.empty()
+input_df = pd.DataFrame({'Pressure (bar)': [10], 'Water dew point (C)': 0.0})
+st.hydrate_df = st.data_editor(
+    input_df,num_rows='dynamic')
+
+
+# Button to trigger calculations
+if st.button('Calc'):
     neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).autoSelectModel()
-    neqsim_fluid.setPressure(pressure, 'bara')
-    neqsim_fluid.setTemperature(temp, 'C')
+    neqsim_fluid.setTemperature(0.0, 'C')
     TPflash(neqsim_fluid)
-    st.success('Flash finished successfully!')
-    st.subheader("Results:")
-    results_df = st.data_editor(dataFrame(neqsim_fluid))
-    st.divider()
-    list1 = neqsim_fluid.getComponentNames()
-    l1 = list(list1)
-    string_list = [str(element) for element in l1]
-    delimiter = ", "
-    result_string = delimiter.join(string_list)
-    input = "What scientific experimental equilibrium data are available for mixtures of " + result_string + " at temperature around " + str(temp) + " Celcius and pressure around " + str(pressure) + " bar."  
-    openapitext = st.question(input)
-    st.write(openapitext)
+    for i in range(len(st.hydrate_df)):
+        pressure = st.hydrate_df.at[i, 'Pressure (bar)']
+        neqsim_fluid.setPressure(pressure)
+        results = neqsim.thermo.dewt(neqsim_fluid)-273.15
+        print(results)
+        st.hydrate_df.at[i, 'Water dew point (C)'] = results
+
+st.hydrate_df
