@@ -1,6 +1,7 @@
+![NeqSim Logo](https://github.com/equinor/neqsim/blob/master/docs/wiki/neqsimlogocircleflatsmall.png)
 
-# Welcome to NeqSimWeb2
-NeqSimWeb2 is a web user interface for the [neqsim process simulator](https://equinor.github.io/neqsimhome/).
+# NeqSim Web application
+The NeqSim Web project is a web user interface for the [neqsim process simulator](https://equinor.github.io/neqsimhome/).
 
 The application is in initial development and is using the [streamlit framework](https://streamlit.io/).
 
