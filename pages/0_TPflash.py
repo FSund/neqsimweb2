@@ -51,5 +51,8 @@ if st.button('Run'):
     delimiter = ", "
     result_string = delimiter.join(string_list)
     input = "What scientific experimental equilibrium data are available for mixtures of " + result_string + " at temperature around " + str(temp) + " Celcius and pressure around " + str(pressure) + " bar."  
-    openapitext = st.question(input)
-    st.write(openapitext)
+    try:
+        openapitext = st.question(input)
+        st.write(openapitext)
+    except:
+        st.write('OpenAI key needed for data analysis')
