@@ -46,6 +46,9 @@ if st.button('Run'):
     string_list = [str(element) for element in l1]
     delimiter = ", "
     result_string = delimiter.join(string_list)
-    input = "What scientific experimental hydrate equilibrium data are available for mixtures of " + result_string  
-    openapitext = st.question(input)
-    st.write(openapitext)
+    try:
+        input = "What scientific experimental hydrate equilibrium data are available for mixtures of " + result_string  
+        openapitext = st.question(input)
+        st.write(openapitext)
+    except:
+        st.write('OpenAI key needed for data analysis')
