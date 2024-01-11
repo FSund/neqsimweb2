@@ -9,8 +9,9 @@ from openai import OpenAI
 
 def make_request(question_input: str):
     try:
-        API_KEY = st.secrets["apipas"]
-        OpenAI.api_key = API_KEY
+        #API_KEY = st.secrets["apipas"]
+        #OpenAI.api_key = API_KEY
+        OpenAI.api_key = openai_api_key
         client = OpenAI(api_key=API_KEY)
     except:
         st.write('no OPENAI key given..')
@@ -24,6 +25,8 @@ def make_request(question_input: str):
         return completion.choices[0].text
     except:
         return ""
+
+openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
 st.set_page_config(page_title="NeqSim", page_icon='images/neqsimlogocircleflat.png')
 
