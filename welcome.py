@@ -8,7 +8,6 @@ from openai import OpenAI
 
 
 def make_request(question_input: str):
-    print('here' + openai_api_key)
     try:
         #API_KEY = st.secrets["apipas"]
         #OpenAI.api_key = API_KEY
