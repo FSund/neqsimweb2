@@ -26,8 +26,6 @@ def make_request(question_input: str):
     except:
         return ""
 
-openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-
 st.set_page_config(page_title="NeqSim", page_icon='images/neqsimlogocircleflat.png')
 
 st.image('images/neqsimlogocircleflat.png', width=150)
@@ -52,3 +50,5 @@ Use right menu to select operations
 ## NeqSim Chatbot
 NeqSim Streamlit is integrated with OpenAI, and will provide information related to the simulations.
 """
+
+openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
