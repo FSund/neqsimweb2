@@ -12,7 +12,7 @@ def make_request(question_input: str):
         #API_KEY = st.secrets["apipas"]
         #OpenAI.api_key = API_KEY
         OpenAI.api_key = openai_api_key
-        client = OpenAI(api_key=API_KEY)
+        client = OpenAI(api_key=openai_api_key)
     except:
         st.write('no OPENAI key given..')
     try:
