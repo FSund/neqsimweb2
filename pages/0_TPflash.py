@@ -56,3 +56,8 @@ if st.button('Run'):
         st.write(openapitext)
     except:
         st.write('OpenAI key needed for data analysis')
+
+uploaded_file = st.sidebar.file_uploader("Import Fluid")
+if uploaded_file is not None:
+    activefluid_df = pd.read_csv(uploaded_file)
+    print(uploaded_file)

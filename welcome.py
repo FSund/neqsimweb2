@@ -9,9 +9,10 @@ from openai import OpenAI
 
 def make_request(question_input: str):
     try:
-        API_KEY = st.secrets["apipas"]
-        OpenAI.api_key = API_KEY
-        client = OpenAI(api_key=API_KEY)
+        #API_KEY = st.secrets["apipas"]
+        #OpenAI.api_key = API_KEY
+        OpenAI.api_key = openai_api_key
+        client = OpenAI(api_key=openai_api_key)
     except:
         st.write('no OPENAI key given..')
     try:
@@ -43,9 +44,12 @@ The NeqSim library is written in the Java programming language. The source code 
 Questions related to use and development are asked on the [NeqSim github discussions](https://github.com/equinor/neqsim/discussions) page.
 
 ## How to use this application
-Use right menu to select operations
+Use left menu to select operations
 
 
 ## NeqSim Chatbot
-NeqSim Streamlit is integrated with OpenAI, and will provide information related to the simulations.
+NeqSim Streamlit is integrated with OpenAI, and will provide information related to the simulations. To use this option an OpenAI key  must be entered in the left menu.
 """
+
+openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+st.make_request = make_request
