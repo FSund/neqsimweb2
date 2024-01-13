@@ -61,10 +61,8 @@ if st.button('Run'):
         st.write('OpenAI key needed for data analysis')
 
 uploaded_file = st.sidebar.file_uploader("Import Fluid")
-time.sleep(1)
 if uploaded_file is not None:
     st.session_state.activefluid_df = pd.read_csv(uploaded_file)
-
-check1 = st.sidebar.button("Set fluid")
-if check1:
+    check1 = st.sidebar.button("Set fluid")
+else:
     st.session_state.activefluid_df = pd.DataFrame(default_fluid)
