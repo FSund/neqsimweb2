@@ -5,4 +5,4 @@ The NeqSim Web project is a web user interface for the [neqsim process simulator
 
 The application is in initial development and is using the [streamlit framework](https://streamlit.io/).
 
-The application is hosted by streamlit and can be tested at [neqsim web app link](https://neqsimweb2.streamlit.app/).
+The application is hosted by streamlit and can be tested at [neqsim web app link](https://neqsim.streamlit.app/).
