@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import time
 import neqsim
 from neqsim.thermo.thermoTools import fluidcreator, fluid_df, TPflash, dataFrame
 from fluids import default_fluid
@@ -9,15 +10,15 @@ st.divider()
 st.text("Set fluid composition:")
 
 if 'activefluid_df' not in st.session_state:
-   activefluid_df = pd.DataFrame(default_fluid)
+   st.session_state.activefluid_df = pd.DataFrame(default_fluid)
 
 hidecomponents = st.checkbox('Show active components')
 
 if hidecomponents:
-    activefluid_df =  st.edited_df[st.edited_df['MolarComposition[-]'] > 0]
+    st.session_state.activefluid_df =  st.edited_df[st.edited_df['MolarComposition[-]'] > 0]
 
 st.edited_df = st.data_editor(
-    activefluid_df,
+    st.session_state.activefluid_df,
     column_config={
         "ComponentName": "Component Name",
         "MolarComposition[-]": st.column_config.NumberColumn("Molar Composition [-]", min_value=0, max_value=10000, format="%f"),
@@ -58,6 +59,10 @@ if st.button('Run'):
         st.write('OpenAI key needed for data analysis')
 
 uploaded_file = st.sidebar.file_uploader("Import Fluid")
+time.sleep(1)
 if uploaded_file is not None:
-    activefluid_df = pd.read_csv(uploaded_file)
-    print(uploaded_file)
+    st.session_state.activefluid_df = pd.read_csv(uploaded_file)
+
+check1 = st.sidebar.button("Set fluid")
+if check1:
+    st.session_state.activefluid_df = pd.DataFrame(default_fluid)
