@@ -1,17 +1,24 @@
 import streamlit as st
 import pandas as pd
 import neqsim
+import time
 from neqsim.thermo.thermoTools import fluidcreator, fluid_df, hydt, dataFrame
 from fluids import default_fluid
 
 st.title('Gas Hydrate Calculation')
 st.divider()
-
 st.text("Set fluid composition:")
 
-df = pd.DataFrame(default_fluid)
+if 'activefluid_df' not in st.session_state:
+   st.session_state.activefluid_df = pd.DataFrame(default_fluid)
+
+hidecomponents = st.checkbox('Show active components')
+
+if hidecomponents:
+    st.session_state.activefluid_df =  st.edited_df[st.edited_df['MolarComposition[-]'] > 0]
+
 st.edited_df = st.data_editor(
-    df,
+    st.session_state.activefluid_df,
     column_config={
         "ComponentName": "Component Name",
         "MolarComposition[-]": st.column_config.NumberColumn(
@@ -52,3 +59,10 @@ if st.button('Run'):
         st.write(openapitext)
     except:
         st.write('OpenAI key needed for data analysis')
+
+uploaded_file = st.sidebar.file_uploader("Import Fluid")
+if uploaded_file is not None:
+    st.session_state.activefluid_df = pd.read_csv(uploaded_file)
+    check1 = st.sidebar.button("Set fluid")
+else:
+    st.session_state.activefluid_df = pd.DataFrame(default_fluid)
