@@ -40,25 +40,30 @@ st.divider()
 pressure = st.number_input("Pressure (bara)", min_value=0.0, value=1.0)  # Default 1 bara
 
 if st.button('Run'):
-    neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=False, add_all_components=False).autoSelectModel()
-    neqsim_fluid.setPressure(pressure, 'bara')
-    hydt(neqsim_fluid)
-    st.success('Hydrate calculation finished successfully!')
-    st.text("Hydrate temperature " +str(round(neqsim_fluid.getTemperature('C'), 2)) + " [C]")
-    st.subheader("Results:")
-    results_df = st.data_editor(dataFrame(neqsim_fluid))
-    st.divider()
-    list1 = neqsim_fluid.getComponentNames()
-    l1 = list(list1)
-    string_list = [str(element) for element in l1]
-    delimiter = ", "
-    result_string = delimiter.join(string_list)
-    try:
-        input = "What scientific experimental hydrate equilibrium data are available for mixtures of " + result_string  
-        openapitext = st.make_request(input)
-        st.write(openapitext)
-    except:
-        st.write('OpenAI key needed for data analysis')
+    # Check if water's MolarComposition[-] is greater than 0
+    water_row = st.edited_df[st.edited_df['ComponentName'] == 'water']  # Adjust 'ComponentName' and 'water' as necessary
+    if not water_row.empty and water_row['MolarComposition[-]'].iloc[0] > 0:
+        neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=False, add_all_components=False).autoSelectModel()
+        neqsim_fluid.setPressure(pressure, 'bara')
+        hydt(neqsim_fluid)  # Assuming 'hydt' is your method for hydrate calculation
+        st.success('Hydrate calculation finished successfully!')
+        st.text("Hydrate temperature " + str(round(neqsim_fluid.getTemperature('C'), 2)) + " [C]")
+        st.subheader("Results:")
+        results_df = st.data_editor(dataFrame(neqsim_fluid))
+        st.divider()
+        list1 = neqsim_fluid.getComponentNames()
+        l1 = list(list1)
+        string_list = [str(element) for element in l1]
+        delimiter = ", "
+        result_string = delimiter.join(string_list)
+        try:
+            input = "What scientific experimental hydrate equilibrium data are available for mixtures of " + result_string
+            openapitext = st.make_request(input)
+            st.write(openapitext)
+        except:
+            st.write('OpenAI key needed for data analysis')
+    else:
+        st.error('Water Molar Composition must be greater than 0. Please adjust your inputs.')
 
 uploaded_file = st.sidebar.file_uploader("Import Fluid")
 if uploaded_file is not None:
