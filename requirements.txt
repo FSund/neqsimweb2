@@ -4,5 +4,4 @@ pandas
 streamlit
 matplotlib
 openai
-pydantic
-functools
+xlsxwriter
