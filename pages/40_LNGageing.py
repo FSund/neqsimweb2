@@ -45,7 +45,7 @@ refvolT = st.number_input('Reference Volume Temperature (C)', value=15.0)
 time_transport = st.number_input('Transport Time (hours)', min_value=0.0, value=24.0)
 standard_version = st.selectbox(
     'ISO6976 standard version:',
-    ('2004', '2016'),
+    ('1995', '2016'),
     index=1  # Default to the second option, which is '2016'
 )
 if st.button('Simulate Ageing'):
