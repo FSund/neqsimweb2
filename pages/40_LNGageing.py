@@ -83,6 +83,7 @@ if st.button('Simulate Ageing'):
 
     # Creating DataFrame from results with cleaned column names
     resultsDF = pd.DataFrame([[float(str(j).replace(',', '')) for j in i] for i in results], columns=cleaned_columns)
+    resultsDF.columns = ['time', 'temperature','GCV','WI','density','volume','C1','C2','C3','iC4','nC4','iC5','nC5','C6','N2','energy', 'GCV_mass', 'gC1','gC2','gC3','giC4','gnC4','giC5','gnC5','gC6','gN2']
 
     # Display the DataFrame
     print(resultsDF.head())  # or use st.dataframe(resultsDF) in Streamlit
