@@ -40,12 +40,20 @@ st.subheader('LNG Ageing Simulation Parameters')
 pressure_transport = st.number_input('Transport Pressure (bara)', min_value=0.0, value=1.01325)
 volume_initial = st.number_input('Initial Volume (m3)', min_value=0.0, value=10000.0)
 BOR = st.number_input('Boil-off Rate (%)', min_value=0.0, value=0.15)
-refEnergyT = st.number_input('Reference Energy Temperature (C)', value=15.0)
-refvolT = st.number_input('Reference Volume Temperature (C)', value=15.0)
 time_transport = st.number_input('Transport Time (hours)', min_value=0.0, value=24.0)
 standard_version = st.selectbox(
     'ISO6976 standard version:',
     ('2004', '2016'),
+    index=1  # Default to the second option, which is '2016'
+)
+energy_ref_temp = st.selectbox(
+    'ISO6976 energy reference temperature:',
+    (0, 15, 15.55, 20),
+    index=1  # Default to the second option, which is '2016'
+)
+volume_ref_temp = st.selectbox(
+    'ISO6976 volume reference temperature:',
+    (0, 15, 15.55, 20),
     index=1  # Default to the second option, which is '2016'
 )
 if st.button('Simulate Ageing'):
@@ -58,8 +66,8 @@ if st.button('Simulate Ageing'):
     # Creating ship system for LNG ageing
     ship = jNeqSim.fluidMechanics.flowSystem.twoPhaseFlowSystem.shipSystem.LNGship(fluid, volume_initial, BOR / 100.0)
     ship.useStandardVersion("", standard_version)
-    ship.getStandardISO6976().setEnergyRefT(refEnergyT)
-    ship.getStandardISO6976().setVolRefT(refvolT)
+    ship.getStandardISO6976().setEnergyRefT(energy_ref_temp)
+    ship.getStandardISO6976().setVolRefT(volume_ref_temp)
     ship.setEndTime(time_transport)
     ship.createSystem()
     ship.solveSteadyState(0)
