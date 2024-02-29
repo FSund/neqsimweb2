@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import neqsim
-from neqsim.thermo.thermoTools import fluidcreator, fluid_df, TPflash, dataFrame
+from neqsim.thermo.thermoTools import hydt,fluidcreator, fluid_df, TPflash, dataFrame
 from fluids import default_fluid
 
 st.title('Water Dew Point')
@@ -34,10 +34,10 @@ isplusfluid = st.checkbox('Plus Fluid')
 st.text("Fluid composition will be normalized before simulation")
 st.divider()
 
+pressure = st.number_input("Pressure (bara)", min_value=0.0, value=1.0)  # Default 1 bara
+
 input_data = st.empty()
-input_df = pd.DataFrame({'Pressure (bar)': [10], 'Water dew point (C)': 0.0})
-st.hydrate_df = st.data_editor(
-    input_df,num_rows='dynamic')
+input_df = pd.DataFrame({'Pressure (bar)': [10], 'Water dew point (C)': 0.0, 'Hydrate temperature (C)': 0.0, 'Ice temperature (C)': 0.0})
 
 
 # Button to trigger calculations
@@ -46,10 +46,15 @@ if st.button('Calc'):
     neqsim_fluid.setTemperature(0.0, 'C')
     TPflash(neqsim_fluid)
     for i in range(len(st.hydrate_df)):
-        pressure = st.hydrate_df.at[i, 'Pressure (bar)']
         neqsim_fluid.setPressure(pressure)
         results = neqsim.thermo.dewt(neqsim_fluid)-273.15
         print(results)
         st.hydrate_df.at[i, 'Water dew point (C)'] = results
+        hydresults = neqsim.thermo.hydt(neqsim_fluid)-273.15
+        st.hydrate_df.at[i, 'Hydrate temperature (C)'] = hydresults
+        neqsim.thermo.freeze(neqsim_fluid)
+        freezet = neqsim_fluid.getTemperature('C')
+        st.hydrate_df.at[i, 'Ice temperature (C)'] = freezet
+
 
 st.hydrate_df
