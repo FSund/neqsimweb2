@@ -37,25 +37,30 @@ temp = st.number_input("Temperature (C)", min_value=-273.15, value=20.0)  # Defa
 pressure = st.number_input("Pressure (bara)", min_value=0.0, value=1.0)  # Default 1 bara
 
 if st.button('Run'):
-    neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).autoSelectModel()
-    neqsim_fluid.setPressure(pressure, 'bara')
-    neqsim_fluid.setTemperature(temp, 'C')
-    TPflash(neqsim_fluid)
-    st.success('Flash finished successfully!')
-    st.subheader("Results:")
-    results_df = st.data_editor(dataFrame(neqsim_fluid))
-    st.divider()
-    list1 = neqsim_fluid.getComponentNames()
-    l1 = list(list1)
-    string_list = [str(element) for element in l1]
-    delimiter = ", "
-    result_string = delimiter.join(string_list)
-    try:
-        input = "What scientific experimental equilibrium data are available for mixtures of " + result_string + " at temperature around " + str(temp) + " Celcius and pressure around " + str(pressure) + " bar."
-        openapitext = st.make_request(input)
-        st.write(openapitext)
-    except:
-        st.write('OpenAI key needed for data analysis')
+    # Check if the sum of MolarComposition[-] values is greater than 0
+    if st.edited_df['MolarComposition[-]'].sum() > 0:
+        # Proceed with the calculation
+        neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).autoSelectModel()
+        neqsim_fluid.setPressure(pressure, 'bara')
+        neqsim_fluid.setTemperature(temp, 'C')
+        TPflash(neqsim_fluid)
+        st.success('Flash finished successfully!')
+        st.subheader("Results:")
+        results_df = st.data_editor(dataFrame(neqsim_fluid))
+        st.divider()
+        list1 = neqsim_fluid.getComponentNames()
+        l1 = list(list1)
+        string_list = [str(element) for element in l1]
+        delimiter = ", "
+        result_string = delimiter.join(string_list)
+        try:
+            input = "What scientific experimental equilibrium data are available for mixtures of " + result_string + " at temperature around " + str(temp) + " Celsius and pressure around " + str(pressure) + " bar."
+            openapitext = st.make_request(input)
+            st.write(openapitext)
+        except:
+            st.write('OpenAI key needed for data analysis')
+    else:
+        st.error('The sum of Molar Composition must be greater than 0. Please adjust your inputs.')
 
 uploaded_file = st.sidebar.file_uploader("Import Fluid")
 if uploaded_file is not None:
