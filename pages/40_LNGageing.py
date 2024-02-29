@@ -34,18 +34,6 @@ num_rows='dynamic')
 st.text("Fluid composition will be normalized before simulation")
 st.divider()
 
-# User inputs
-eosmodel = st.selectbox('Equation of State Model', ['SRK', 'PR'], index=1)
-pressure_transport = st.number_input('Transport Pressure (bara)', min_value=0.0, value=1.01325)
-volume_initial = st.number_input('Initial Volume (m3)', min_value=0.0, value=10000.0)
-BOR = st.number_input('Boil-off Rate (%)', min_value=0.0, value=0.15)
-refEnergyT = st.number_input('Reference Energy Temperature (C)', value=15.0)
-refvolT = st.number_input('Reference Volume Temperature (C)', value=15.0)
-time_transport = st.number_input('Transport Time (hours)', min_value=0.0, value=24.0)
-
-# Create fluid from user input
-fluid = fluid_df(st.edited_df).autoSelectModel()
-
 # LNG Ageing Simulation Parameters
 st.subheader('LNG Ageing Simulation Parameters')
 pressure_transport = st.number_input('Transport Pressure (bara)', min_value=0.0, value=1.01325)
@@ -56,6 +44,9 @@ refvolT = st.number_input('Reference Volume Temperature (C)', value=15.0)
 time_transport = st.number_input('Transport Time (hours)', min_value=0.0, value=24.0)
 
 if st.button('Simulate Ageing'):
+    global ship
+    # Create fluid from user input
+    fluid = fluid_df(st.edited_df).autoSelectModel()
     fluid.setPressure(pressure_transport, 'bara')
     fluid.setTemperature(-160.0, "C")  # setting a guessed initial temperature
     
@@ -70,6 +61,44 @@ if st.button('Simulate Ageing'):
     ship.solveTransient(0)
     ageingresults = ship.getResults("temp")
 
-    # Display results
-    st.write('Ageing Results:')
-    st.write(ageingresults)
+ageingresults = ship.getResults("temp")
+ # Assuming ageingresults is already obtained from the simulation
+results = ageingresults[1:]  # Data rows
+columns = ageingresults[0]   # Column headers
+
+# Clean the column names to ensure uniqueness and handle empty or None values
+cleaned_columns = []
+seen = set()
+for i, col in enumerate(columns):
+    new_col = col if col not in (None, '') else f"Unnamed_{i}"
+    if new_col in seen:
+        new_col = f"{new_col}_{i}"
+    seen.add(new_col)
+    cleaned_columns.append(new_col)
+
+# Creating DataFrame from results with cleaned column names
+resultsDF = pd.DataFrame([[float(str(j).replace(',', '')) for j in i] for i in results], columns=cleaned_columns)
+
+# Display the DataFrame
+print(resultsDF.head())  # or use st.dataframe(resultsDF) in Streamlit
+
+# Displaying the results DataFrame in Streamlit
+st.subheader('Ageing Simulation Results')
+st.dataframe(resultsDF)
+
+# Function to convert DataFrame to Excel and offer download
+def convert_df_to_excel(df):
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False)
+        writer.save()
+    processed_data = output.getvalue()
+    return processed_data
+
+# Download button for the results in Excel format
+if st.button('Download Results as Excel'):
+    excel_data = convert_df_to_excel(resultsDF)
+    st.download_button(label='📥 Download Excel',
+                       data=excel_data,
+                       file_name='lng_ageing_results.xlsx',
+                       mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
