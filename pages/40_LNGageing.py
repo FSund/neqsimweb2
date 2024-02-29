@@ -38,7 +38,7 @@ st.divider()
 # LNG Ageing Simulation Parameters
 st.subheader('LNG Ageing Simulation Parameters')
 pressure_transport = st.number_input('Transport Pressure (bara)', min_value=0.0, value=1.01325)
-volume_initial = st.number_input('Initial Volume (m3)', min_value=0.0, value=10000.0)
+volume_initial = st.number_input('Initial Volume (m3)', min_value=0.0, value=120000.0)
 BOR = st.number_input('Boil-off Rate (%)', min_value=0.0, value=0.15)
 time_transport = st.number_input('Transport Time (hours)', min_value=0.0, value=24.0)
 standard_version = st.selectbox(
