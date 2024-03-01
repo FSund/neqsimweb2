@@ -11,9 +11,12 @@ st.title('Phase Envelope')
 st.text("Set fluid composition:")
 # Sample data for the DataFrame
 
-df = pd.DataFrame(detailedHC_data)
+if 'activefluid_df' not in st.session_state or st.session_state.activefluid_name != 'detailedHC_data':
+   st.session_state.activefluid_name = 'detailedHC_data'
+   st.session_state.activefluid_df = pd.DataFrame(detailedHC_data)
+
 st.edited_df = st.data_editor(
-    df,
+    st.session_state.activefluid_df,
     column_config={
         "ComponentName": "Component Name",
         "MolarComposition[-]": st.column_config.NumberColumn(

@@ -11,7 +11,8 @@ st.title('LNG Ageing Simulation')
 st.divider()
 st.text("Set fluid composition:")
 
-if 'activefluid_df' not in st.session_state:
+if 'activefluid_df' not in st.session_state  or 'activefluid_name' not in st.session_state or st.session_state.activefluid_name != 'lng_fluid':
+   st.session_state.activefluid_name = 'lng_fluid'
    st.session_state.activefluid_df = pd.DataFrame(lng_fluid)
 
 hidecomponents = st.checkbox('Show active components')
