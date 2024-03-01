@@ -57,7 +57,6 @@ volume_ref_temp = st.selectbox(
     index=1  # Default to the second option, which is '2016'
 )
 if st.button('Simulate Ageing'):
-    global ship
     # Create fluid from user input
     fluid = fluid_df(st.edited_df).autoSelectModel()
     fluid.setPressure(pressure_transport, 'bara')
