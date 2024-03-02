@@ -23,7 +23,7 @@ To estimate LNG aging, NeqSim considers the following factors:
 
 1. Boil-off gas (BOG): BOG refers to the vaporization of LNG that occurs during storage and transportation. It mainly consists of lighter hydrocarbons that evaporate more easily than methane. The rate of BOG formation depends on factors such as temperature, pressure, insulation, and containment system efficiency. By monitoring and measuring the BOG, you can estimate the extent of aging.
 
-2. Composition changes: As LNG ages, lighter components, such as nitrogen and methane, can evaporate more readily than heavier hydrocarbons. This ageing process leads to changes in the LNG composition. The rate of composition change depends on factors like storage time, temperature, and initial composition.
+2. Composition changes: As LNG ages, lighter components, such as nitrogen and methane, can evaporate more readily than heavier hydrocarbons. This ageing process leads to changes in the LNG composition. The rate of composition change depends on factors like transport time, temperature, and initial composition.
 
 """
 st.divider()
