@@ -6,10 +6,28 @@ from fluids import lng_fluid
 from neqsim.thermo.thermoTools import fluid_df
 from io import BytesIO
 
-# Streamlit page configuration
-st.title('LNG Ageing Simulation')
+col1, col2 = st.columns([30,70])
+
+with col2:
+    # Streamlit page configuration
+    st.title('LNG Ageing Simulation')
+
+with col1:
+    st.image('images/LNGship.jpg')
+
 st.divider()
-st.text("Set fluid composition:")
+"""
+Calculating the aging of LNG during transportation involves considering various factors such as temperature, pressure, composition, and transport time. However, it is important to note that LNG aging is a complex process influenced by many variables, and there is no standardized calculation method. In the following method we assume a gas composition in equilibrium with the LNG at the bubble point. The Peng Robinson EOS is used for thermodynamic calculations and the Klosek-McKinley method is used for calculating LNG density.
+
+To estimate LNG aging, NeqSim considers the following factors:
+
+1. Boil-off gas (BOG): BOG refers to the vaporization of LNG that occurs during storage and transportation. It mainly consists of lighter hydrocarbons that evaporate more easily than methane. The rate of BOG formation depends on factors such as temperature, pressure, insulation, and containment system efficiency. By monitoring and measuring the BOG, you can estimate the extent of aging.
+
+2. Composition changes: As LNG ages, lighter hydrocarbons, such as ethane and propane, can evaporate more readily than methane. This fractionation process can lead to changes in the LNG composition. The rate of composition change depends on factors like storage time, temperature, and initial composition.
+
+"""
+st.divider()
+st.subheader("Initial LNG composition:")
 
 if 'activefluid_df' not in st.session_state  or 'activefluid_name' not in st.session_state or st.session_state.activefluid_name != 'lng_fluid':
    st.session_state.activefluid_name = 'lng_fluid'
