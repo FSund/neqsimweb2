@@ -21,9 +21,9 @@ Calculating the aging of LNG during transportation involves considering various 
 
 To estimate LNG aging, NeqSim considers the following factors:
 
-1. Boil-off gas (BOG): BOG refers to the vaporization of LNG that occurs during storage and transportation. It mainly consists of lighter hydrocarbons that evaporate more easily than methane. The rate of BOG formation depends on factors such as temperature, pressure, insulation, and containment system efficiency. By monitoring and measuring the BOG, you can estimate the extent of aging.
+1. Boil-off gas (BOG): BOG refers to the vaporization of LNG that occurs during storage and transportation. It mainly consists of lighter hydrocarbons that evaporate more easily than the heavier. The rate of BOG formation depends on factors such as temperature, pressure, insulation, and containment system efficiency. By monitoring and measuring the BOG, you can estimate the extent of aging.
 
-2. Composition changes: As LNG ages, lighter components, such as nitrogen and methane, can evaporate more readily than heavier hydrocarbons. This ageing process leads to changes in the LNG composition. The rate of composition change depends on factors like storage time, temperature, and initial composition.
+2. Composition changes: As LNG ages, lighter components, such as nitrogen and methane, can evaporate more readily than heavier hydrocarbons. This ageing process leads to changes in the LNG composition. The rate of composition change depends on factors like transport time, temperature, and initial composition.
 
 """
 st.divider()
@@ -69,7 +69,7 @@ standard_version = st.selectbox(
 )
 energy_ref_temp = st.selectbox(
     'ISO6976 energy reference temperature:',
-    (0, 15, 15.55, 20),
+    (0, 15, 15.55, 20, 25),
     index=1  # Default to the second option, which is '2016'
 )
 volume_ref_temp = st.selectbox(
@@ -112,7 +112,7 @@ if st.button('Simulate Ageing'):
 
         # Creating DataFrame from results with cleaned column names
         resultsDF = pd.DataFrame([[float(str(j).replace(',', '')) for j in i] for i in results], columns=cleaned_columns)
-        resultsDF.columns = ['time', 'temperature','GCV','WI','density','volume','C1','C2','C3','iC4','nC4','iC5','nC5','C6','N2','energy', 'GCV_mass', 'gC1','gC2','gC3','giC4','gnC4','giC5','gnC5','gC6','gN2']
+        resultsDF.columns = ['time', 'temperature','WI','GCV','density','volume','C1','C2','C3','iC4','nC4','iC5','nC5','C6','N2','energy', 'GCV_mass', 'gC1','gC2','gC3','giC4','gnC4','giC5','gnC5','gC6','gN2']
 
         # Display the DataFrame
         #print(resultsDF.head())  # or use st.dataframe(resultsDF) in Streamlit
@@ -136,5 +136,28 @@ if st.button('Simulate Ageing'):
                         data=excel_data,
                         file_name='lng_ageing_results.xlsx',
                         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        st.divider()
+        """
+        Units:
+
+        Temperature : Celsius
+
+        GCV: MJ/m3
+
+        WI: MJ/m3
+
+        Density: kg/m3
+
+        Volume: m3
+        
+        Composition: C1-C6 molar fraction of LNG, gC1-gC6 molar fraction of boil off gas 
+
+        GCV_mass: MJ/kg
+
+        Energy: MJ (total energy)
+        
+        """
     else:
         st.error('The sum of Molar Composition must be greater than 0. Please adjust your inputs.')
+
+    
