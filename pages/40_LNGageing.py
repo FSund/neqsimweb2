@@ -74,7 +74,7 @@ energy_ref_temp = st.selectbox(
 )
 volume_ref_temp = st.selectbox(
     'ISO6976 volume reference temperature:',
-    (0, 15, 15.55, 20, 25),
+    (0, 15, 15.55, 20),
     index=1  # Default to the second option, which is '2016'
 )
 if st.button('Simulate Ageing'):
