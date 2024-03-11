@@ -150,7 +150,7 @@ if st.button('Simulate Ageing'):
 
         Volume: m3
         
-        Composition: C1-C6 molar fraction in liquid, gC1-gC6 molar fraction in gas 
+        Composition: C1-C6 molar fraction of LNG, gC1-gC6 molar fraction of boil off gas 
 
         GCV_mass: MJ/kg
 
