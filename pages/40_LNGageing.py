@@ -151,6 +151,11 @@ if st.button('Simulate Ageing'):
         Volume: m3
         
         Composition: C1-C6 molar fraction in liquid, gC1-gC6 molar fraction in gas 
+
+        GCV_mass: MJ/kg
+
+        Energy: MJ (total energy)
+        
         """
     else:
         st.error('The sum of Molar Composition must be greater than 0. Please adjust your inputs.')
