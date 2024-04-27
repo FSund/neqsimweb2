@@ -142,9 +142,9 @@ if st.button('Simulate Ageing'):
 
         Temperature : Celsius
 
-        GCV: MJ/m3
+        GCV: MJ/(S)m3
 
-        WI: MJ/m3
+        WI: MJ/(S)m3
 
         Density: kg/m3
 
