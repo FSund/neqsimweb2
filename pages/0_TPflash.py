@@ -15,8 +15,8 @@ if 'activefluid_df' not in st.session_state or st.session_state.activefluid_name
 
 if 'tp_data' not in st.session_state:
     st.session_state['tp_data'] = pd.DataFrame({
-        'Temperature (C)': [20.0],  # Default example temperature
-        'Pressure (bara)': [1.0]    # Default example pressure
+        'Temperature (C)': [20.0, 25.0],  # Default example temperature
+        'Pressure (bara)': [1.0, 10.0]  # Default example pressure
     })
     
 hidecomponents = st.checkbox('Show active components')
