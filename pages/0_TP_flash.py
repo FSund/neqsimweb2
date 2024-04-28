@@ -6,6 +6,9 @@ from neqsim.thermo.thermoTools import fluidcreator, fluid_df, TPflash, dataFrame
 from fluids import default_fluid
 
 st.title('TP flash')
+"""
+NeqSim TP flash will select the best thermodynamic model based on the fluid composition. For fluids containing polar components it will use the CPA-EoS.
+"""
 st.divider()
 st.text("Set fluid composition:")
 
