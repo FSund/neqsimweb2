@@ -4,6 +4,7 @@ import neqsim
 import time
 from neqsim.thermo.thermoTools import fluidcreator, fluid_df, hydt, dataFrame
 from fluids import default_fluid
+import matplotlib.pyplot as plt
 
 st.title('Gas Hydrate Calculation')
 st.divider()
@@ -12,6 +13,12 @@ st.text("Set fluid composition:")
 if 'activefluid_df' not in st.session_state or st.session_state.activefluid_name != 'default_fluid':
     st.session_state.activefluid_name = 'default_fluid'
     st.session_state.activefluid_df = pd.DataFrame(default_fluid)
+
+if 'tp_data' not in st.session_state:
+    st.session_state['tp_data'] = pd.DataFrame({
+        'Pressure (bara)': [50.0, 100.0, 150.0, 200.0],   # Default example pressure
+        'Temperature (C)': [None, None, None, None]  # Default temperature
+    })
 
 hidecomponents = st.checkbox('Show active components')
 
@@ -38,19 +45,70 @@ st.text("Fluid composition will be normalized before simulation")
 
 st.divider()
 
-pressure = st.number_input("Pressure (bara)", min_value=0.0, value=1.0)  # Default 1 bara
+st.text("Input Pressures and Temperatures")
+
+st.edited_dfTP = st.data_editor(
+    st.session_state.tp_data['Pressure (bara)'].reset_index(drop=True),
+    num_rows='dynamic',  # Allows dynamic number of rows
+    column_config={
+        'Pressure (bara)': st.column_config.NumberColumn(
+            label="Pressure (bara)",
+            min_value=0.0,      # Minimum pressure
+            max_value=1000,     # Maximum pressure
+            format='%f',        # Decimal format
+            help='Enter the pressure in bar absolute.'  # Help text for guidance
+        )
+    }
+)
 
 if st.button('Run'):
     # Check if water's MolarComposition[-] is greater than 0
     water_row = st.edited_df[st.edited_df['ComponentName'] == 'water']  # Adjust 'ComponentName' and 'water' as necessary
     if not water_row.empty and water_row['MolarComposition[-]'].iloc[0] > 0:
         neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=False, add_all_components=False).autoSelectModel()
-        neqsim_fluid.setPressure(pressure, 'bara')
-        hydt(neqsim_fluid)  # Assuming 'hydt' is your method for hydrate calculation
+        results_list = []
+        pres_list = []
+        for pres in st.edited_dfTP:
+            pressure = pres
+            pres_list.append(pressure)
+            neqsim_fluid.setPressure(pressure, 'bara')
+            results_list.append(hydt(neqsim_fluid)-273.15)
+        st.session_state['tp_data'] = pd.DataFrame({
+            'Pressure (bara)': pres_list,   # Default example pressure
+            'Temperature (C)': results_list  # Default temperature
+        })
+        st.session_state['tp_data'] = st.session_state['tp_data'].sort_values('Pressure (bara)')
         st.success('Hydrate calculation finished successfully!')
-        st.text("Hydrate temperature " + str(round(neqsim_fluid.getTemperature('C'), 2)) + " [C]")
-        st.subheader("Results:")
-        results_df = st.data_editor(dataFrame(neqsim_fluid))
+        if st.session_state.get('refresh', True):
+            st.edited_dfTP2 = st.data_editor(
+                st.session_state.tp_data.reset_index(drop=True),
+                num_rows='dynamic',  # Allows dynamic number of rows
+                column_config={
+                    'Pressure (bara)': st.column_config.NumberColumn(
+                        label="Pressure (bara)",
+                        min_value=0.0,      # Minimum pressure
+                        max_value=1000,     # Maximum pressure
+                        format='%f',        # Decimal format
+                        help='Enter the pressure in bar absolute.'  # Help text for guidance
+                    ),
+                    'Temperature (C)': st.column_config.NumberColumn(
+                        label="Temperature (C)",
+                        min_value=-273.15,  # Minimum temperature in Celsius
+                        max_value=1000,     # Maximum temperature in Celsius
+                        format='%f',        # Decimal format
+                        disabled=True
+                    ),
+                }
+            )
+        st.divider()
+        plt.figure(figsize=(10, 5))
+        plt.plot(st.session_state['tp_data']['Temperature (C)'], st.session_state['tp_data']['Pressure (bara)'], marker='o', linestyle='-')
+        plt.title('Hydrate Equilibrium Line')
+        plt.ylabel('Pressure (bara)')
+        plt.xlabel('Temperature (C)')
+        plt.grid(True)
+        plt.show()
+        st.pyplot(plt)  # Display the plot in Streamlit
         st.divider()
         list1 = neqsim_fluid.getComponentNames()
         l1 = list(list1)
@@ -63,6 +121,7 @@ if st.button('Run'):
             st.write(openapitext)
         except:
             st.write('OpenAI key needed for data analysis')
+        st.session_state['rerender'] = not st.session_state.get('rerender', False)
     else:
         st.error('Water Molar Composition must be greater than 0. Please adjust your inputs.')
 
