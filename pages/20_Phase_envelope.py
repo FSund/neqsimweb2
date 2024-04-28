@@ -8,6 +8,10 @@ from fluids import detailedHC_data
 
 st.title('Phase Envelope')
 
+"""
+NeqSim uses the UMR-PRU-EoS model for calculations of the phase envelope. The UMR-PRU-EoS is a predictive equation of state that combines the PR EoS with an original UNIFAC-type model for the excess Gibbs energy (GE), through the universal mixing rules (UMR). The model is called UMR-PRU (Universal Mixing Rule Peng Robinson UNIFAC) and it is an accurate model for calculation of cricondenbar and hydrocarbon dew points.
+"""
+
 st.text("Set fluid composition:")
 # Sample data for the DataFrame
 

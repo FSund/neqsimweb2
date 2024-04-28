@@ -68,17 +68,21 @@ if st.button('Run'):
         neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=False, add_all_components=False).autoSelectModel()
         results_list = []
         pres_list = []
+        fluid_results_list = []
         for pres in st.edited_dfTP:
             pressure = pres
             pres_list.append(pressure)
             neqsim_fluid.setPressure(pressure, 'bara')
             results_list.append(hydt(neqsim_fluid)-273.15)
+            fluid_results_list.append(dataFrame(neqsim_fluid))
         st.session_state['tp_data'] = pd.DataFrame({
             'Pressure (bara)': pres_list,   # Default example pressure
             'Temperature (C)': results_list  # Default temperature
         })
         st.session_state['tp_data'] = st.session_state['tp_data'].sort_values('Pressure (bara)')
         st.success('Hydrate calculation finished successfully!')
+        combined_results = pd.concat(fluid_results_list, ignore_index=True)
+           
         if st.session_state.get('refresh', True):
             st.edited_dfTP2 = st.data_editor(
                 st.session_state.tp_data.reset_index(drop=True),
@@ -109,6 +113,8 @@ if st.button('Run'):
         plt.grid(True)
         plt.show()
         st.pyplot(plt)  # Display the plot in Streamlit
+        st.divider()
+        results_df = st.data_editor(combined_results)
         st.divider()
         list1 = neqsim_fluid.getComponentNames()
         l1 = list(list1)

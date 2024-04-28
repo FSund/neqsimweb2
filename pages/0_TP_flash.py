@@ -6,6 +6,9 @@ from neqsim.thermo.thermoTools import fluidcreator, fluid_df, TPflash, dataFrame
 from fluids import default_fluid
 
 st.title('TP flash')
+"""
+NeqSim TP flash will select the best thermodynamic model based on the fluid composition. For fluids containing polar components it will use the CPA-EoS.
+"""
 st.divider()
 st.text("Set fluid composition:")
 
@@ -13,8 +16,8 @@ if 'activefluid_df' not in st.session_state or st.session_state.activefluid_name
    st.session_state.activefluid_name = 'default_fluid'
    st.session_state.activefluid_df = pd.DataFrame(default_fluid)
 
-if 'tp_data' not in st.session_state:
-    st.session_state['tp_data'] = pd.DataFrame({
+if 'tp_flash_data' not in st.session_state:
+    st.session_state['tp_flash_data'] = pd.DataFrame({
         'Temperature (C)': [20.0, 25.0],  # Default example temperature
         'Pressure (bara)': [1.0, 10.0]  # Default example pressure
     })
@@ -45,7 +48,7 @@ st.divider()
 # Use st.data_editor for inputting temperature and pressure
 st.text("Input Pressures and Temperatures")
 st.edited_dfTP = st.data_editor(
-    st.session_state.tp_data.reset_index(drop=True),
+    st.session_state.tp_flash_data.reset_index(drop=True),
     num_rows='dynamic',  # Allows dynamic number of rows
     column_config={
         'Temperature (C)': st.column_config.NumberColumn(
@@ -68,7 +71,7 @@ st.edited_dfTP = st.data_editor(
 if st.button('Run TP Flash Calculations'):
     if st.edited_df['MolarComposition[-]'].sum() > 0:
         # Check if the dataframe is empty
-        if st.session_state.tp_data.empty:
+        if st.session_state.tp_flash_data.empty:
             st.error('No data to perform calculations. Please input temperature and pressure values.')
         else:
             # Initialize a list to store results
