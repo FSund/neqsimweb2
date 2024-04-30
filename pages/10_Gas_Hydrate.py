@@ -7,6 +7,9 @@ from fluids import default_fluid
 import matplotlib.pyplot as plt
 
 st.title('Gas Hydrate Calculation')
+"""
+Gas hydrate calculations are done using the CPA-EoS combined with a model for the solid hydrate phase.
+"""
 st.divider()
 st.text("Set fluid composition:")
 
