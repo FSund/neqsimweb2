@@ -105,12 +105,13 @@ if st.button('Run'):
             )
         st.divider()
         plt.figure(figsize=(10, 5))
-        plt.plot(st.session_state['tp_data']['Hydrate Temperature (C)'], st.session_state['tp_data']['Pressure (bara)'], marker='o', linestyle='-')
-        plt.plot(st.session_state['tp_data']['Aqueous Temperature (C)'], st.session_state['tp_data']['Pressure (bara)'], marker='x', linestyle='--')
+        plt.plot(st.session_state['tp_data']['Hydrate Temperature (C)'], st.session_state['tp_data']['Pressure (bara)'], marker='o', linestyle='-',label="hydrate temperature")
+        plt.plot(st.session_state['tp_data']['Aqueous Temperature (C)'], st.session_state['tp_data']['Pressure (bara)'], marker='x', linestyle='--',label="aqueous dew point")
         
         plt.title('Dew Point Lines')
         plt.ylabel('Pressure (bara)')
         plt.xlabel('Temperature (C)')
+        plt.legend(loc="upper left")
         plt.grid(True)
         plt.show()
         st.pyplot(plt)  # Display the plot in Streamlit
