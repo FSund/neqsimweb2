@@ -51,7 +51,7 @@ st.divider()
 st.text("Input Pressures and Temperatures")
 
 st.edited_dfTP = st.data_editor(
-    st.session_state.tp_data['Pressure (bara)'].reset_index(drop=True),
+    st.session_state.tp_data['Pressure (bara)'].dropna().reset_index(drop=True),
     num_rows='dynamic',  # Allows dynamic number of rows
     column_config={
         'Pressure (bara)': st.column_config.NumberColumn(
@@ -72,7 +72,7 @@ if st.button('Run'):
         results_list = []
         pres_list = []
         fluid_results_list = []
-        for pres in st.edited_dfTP:
+        for pres in st.edited_dfTP.dropna():
             pressure = pres
             pres_list.append(pressure)
             neqsim_fluid.setPressure(pressure, 'bara')
