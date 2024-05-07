@@ -48,7 +48,7 @@ st.divider()
 # Use st.data_editor for inputting temperature and pressure
 st.text("Input Pressures and Temperatures")
 st.edited_dfTP = st.data_editor(
-    st.session_state.tp_flash_data.reset_index(drop=True),
+    st.session_state.tp_flash_data.dropna().reset_index(drop=True),
     num_rows='dynamic',  # Allows dynamic number of rows
     column_config={
         'Temperature (C)': st.column_config.NumberColumn(
@@ -79,7 +79,7 @@ if st.button('Run TP Flash Calculations'):
             neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).autoSelectModel()
             
             # Iterate over each row and perform calculations
-            for idx, row in st.edited_dfTP.iterrows():
+            for idx, row in st.edited_dfTP.dropna().iterrows():
                 temp = row['Temperature (C)']
                 pressure = row['Pressure (bara)']
                 neqsim_fluid.setPressure(pressure, 'bara')
