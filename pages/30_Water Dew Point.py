@@ -21,8 +21,6 @@ if 'tp_data' not in st.session_state:
 
 
 hidecomponents = st.checkbox('Show active components')
-
-hidecomponents = st.checkbox('Show active components')
 if hidecomponents:
     st.session_state.activefluid_df =  st.edited_df[st.edited_df['MolarComposition[-]'] > 0]
 else:
