@@ -56,6 +56,7 @@ if st.button('Run'):
         plt.xlabel('Temperature [C]')
         plt.ylabel('Pressure [bar]')
         plt.legend()
+        plt.grid(True)
         st.pyplot(fig)
         st.divider()
         cricobar = thermoOps.getOperation().get("cricondenbar")
