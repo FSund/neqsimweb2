@@ -69,8 +69,8 @@ if st.button('Run'):
         }
         )
         bubdatapoints = pd.DataFrame(
-        {'bub temperatures[C]': bubts,
-         'bub pressures[bara]':bubps,
+        {'bub temperatures [C]': bubts,
+         'bub pressures [bara]':bubps,
         }
         )
         st.divider()
