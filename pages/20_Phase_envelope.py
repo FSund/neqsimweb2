@@ -54,7 +54,7 @@ if st.button('Run'):
         plt.plot(bubts, bubps, label="bubble point")
         plt.title('PT envelope')
         plt.xlabel('Temperature [C]')
-        plt.ylabel('Pressure [bar]')
+        plt.ylabel('Pressure [bara]')
         plt.legend()
         plt.grid(True)
         st.pyplot(fig)
@@ -64,13 +64,13 @@ if st.button('Run'):
         st.write('cricondentherm ', round(cricotherm[1],2), ' bara, ',  round(cricotherm[0]-273.15,2), ' C')
         st.write('cricondenbar ', round(cricobar[1],2), ' bara, ', round(cricobar[0]-273.15,2), ' C')
         dewdatapoints = pd.DataFrame(
-        {'dew temperatures': dewts,
-         'dew pressures':dewps,
+        {'dew temperatures [C]': dewts,
+         'dew pressures [bara]':dewps,
         }
         )
         bubdatapoints = pd.DataFrame(
-        {'bub temperatures': bubts,
-         'bub pressures':bubps,
+        {'bub temperatures[C]': bubts,
+         'bub pressures[bara]':bubps,
         }
         )
         st.divider()
