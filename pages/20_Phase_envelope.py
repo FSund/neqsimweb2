@@ -35,11 +35,16 @@ st.edited_df = st.data_editor(
 num_rows='dynamic')
 isplusfluid = st.checkbox('Plus Fluid')
 
+usePR = st.checkbox('use standard Peng Robinson EoS')
+
 st.text("Fluid composition will be normalized before simulation")
 st.divider()
 
 if st.button('Run'):
     if st.edited_df['MolarComposition[-]'].sum() > 0:
+        modelname = "UMR-PRU-EoS"
+        if(usePR):
+           modelname = "pr"
         neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).setModel("UMR-PRU-EoS")
         st.success('Successfully created fluid')
         st.subheader("Results:")
