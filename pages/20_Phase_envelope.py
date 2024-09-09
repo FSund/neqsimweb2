@@ -35,7 +35,7 @@ st.edited_df = st.data_editor(
 num_rows='dynamic')
 isplusfluid = st.checkbox('Plus Fluid')
 
-usePR = st.checkbox('Peng Robinson EoS')
+usePR = st.checkbox('Peng Robinson EoS', help='use standard Peng Robinson EoS')
 
 st.text("Fluid composition will be normalized before simulation")
 st.divider()
