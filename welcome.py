@@ -40,8 +40,8 @@ The NeqSim library is written in the Java programming language. The source code 
 
 * [NeqSim Java](https://github.com/equinor/neqsim)
 
-## NeqSim discussion
-Questions related to use and development are asked on the [NeqSim github discussions](https://github.com/equinor/neqsim/discussions) page.
+## NeqSim discussion and suggestions
+For questions, development inquiries, or suggestions for improvement, please visit the [NeqSim GitHub discussions](https://github.com/equinor/neqsim/discussions) page.
 
 ## How to use this application
 Use left menu to select operations
