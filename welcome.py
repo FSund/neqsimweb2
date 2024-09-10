@@ -54,7 +54,5 @@ Use the left-hand menu to select the desired simulation or process. Enter any re
 NeqSim is integrated with OpenAI for enhanced simulation support. Enter your OpenAI API key in the sidebar to interact with the AI assistant for insights and guidance related to your simulations.
 """
 
-openai_api_key = st.sidebar.text_input("Enter OpenAI API Key", type="password")
-st.make_request = make_request
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 st.make_request = make_request
