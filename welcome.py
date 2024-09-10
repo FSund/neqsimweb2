@@ -30,9 +30,8 @@ st.write("# Welcome to the NeqSim Simulation Platform! 👋")
 
 """
 ### About NeqSim
-NeqSim (Non-equilibrium Simulator) is a library for the simulation of fluid behavior, phase equilibrium, and process systems. This platform allows users to leverage NeqSim for process simulations and thermodynamic calculations.
-
-Explore the various models and simulations we offer through the easy-to-use Streamlit interface.
+NeqSim (Non-equilibrium Simulator) is a library for the simulation of fluid behavior, phase equilibrium, and process systems.
+Explore the various models and simulations NeqSim offer through this easy-to-use Streamlit interface.
 
 ### Documentation & Tutorials
 For comprehensive documentation on how to use NeqSim for processing and fluid simulations, please refer to our detailed tutorial:  
