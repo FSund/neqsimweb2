@@ -5,22 +5,18 @@ import streamlit as st
 import openai
 from openai import OpenAI
 
-
-
 def make_request(question_input: str):
     try:
-        #API_KEY = st.secrets["apipas"]
-        #OpenAI.api_key = API_KEY
         OpenAI.api_key = openai_api_key
         client = OpenAI(api_key=openai_api_key)
     except:
-        st.write('no OPENAI key given..')
+        st.write('OpenAI key not provided...')
     try:
         completion = client.completions.create(
-        model="gpt-3.5-turbo-instruct",
-        prompt=question_input,
-        max_tokens=500,
-        temperature=0
+            model="gpt-3.5-turbo-instruct",
+            prompt=question_input,
+            max_tokens=500,
+            temperature=0
         )
         return completion.choices[0].text
     except:
@@ -30,25 +26,32 @@ st.set_page_config(page_title="NeqSim", page_icon='images/neqsimlogocircleflat.p
 
 st.image('images/neqsimlogocircleflat.png', width=150)
 
-st.write("# Welcome to NeqSim! 👋")
+st.write("# Welcome to the NeqSim Simulation Platform! 👋")
 
 """
-NeqSim is a library for calculation of fluid behavior, phase equilibrium and process simulation. This this project is a collectiomn of Streamlit models using neqsim for simulation.The method documentation for the models found in this application can be found in [Introduction to Gas Processing using NeqSim in Colab](https://colab.research.google.com/github/EvenSol/NeqSim-Colab/blob/master/notebooks/examples_of_NeqSim_in_Colab.ipynb).
+### About NeqSim
+NeqSim (Non-equilibrium Simulator) is a library for the simulation of fluid behavior, phase equilibrium, and process systems.
+Explore the various models and simulations NeqSim offer through this easy-to-use Streamlit interface.
 
-## NeqSim project in GitHub
-The NeqSim library is written in the Java programming language. The source code and libraries are hosted in GitHub.
+### Documentation & Tutorials
+For comprehensive documentation on how to use NeqSim for processing and fluid simulations, please refer to our detailed tutorial:  
+[Introduction to Gas Processing Using NeqSim](https://colab.research.google.com/github/EvenSol/NeqSim-Colab/blob/master/notebooks/examples_of_NeqSim_in_Colab.ipynb)
 
-* [NeqSim Java](https://github.com/equinor/neqsim)
+### GitHub Repository
+NeqSim is developed in Java and is open-source. You can access the complete source code and contribute to the project on GitHub:
 
-## NeqSim discussion
-Questions related to use and development are asked on the [NeqSim github discussions](https://github.com/equinor/neqsim/discussions) page.
+- [NeqSim Java GitHub Repository](https://github.com/equinor/neqsim)
 
-## How to use this application
-Use left menu to select operations
+### Community & Feedback
+We welcome any feedback, questions, or suggestions for further development. Join the conversation or contribute to discussions on our GitHub page:
 
+- [NeqSim GitHub Discussions](https://github.com/equinor/neqsim/discussions)
 
-## NeqSim Chatbot
-NeqSim Streamlit is integrated with OpenAI, and will provide information related to the simulations. To use this option an OpenAI key  must be entered in the left menu.
+### Getting Started
+Use the left-hand menu to select the desired simulation or process. Enter any required inputs, and NeqSim will handle the calculations.
+
+### NeqSim AI Assistant
+NeqSim is integrated with OpenAI for enhanced simulation support. Enter your OpenAI API key in the sidebar to interact with the AI assistant for insights and guidance related to your simulations.
 """
 
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")

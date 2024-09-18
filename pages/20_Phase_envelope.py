@@ -35,16 +35,21 @@ st.edited_df = st.data_editor(
 num_rows='dynamic')
 isplusfluid = st.checkbox('Plus Fluid')
 
+usePR = st.checkbox('Peng Robinson EoS', help='use standard Peng Robinson EoS')
+
 st.text("Fluid composition will be normalized before simulation")
 st.divider()
 
 if st.button('Run'):
     if st.edited_df['MolarComposition[-]'].sum() > 0:
-        neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).setModel("UMR-PRU-EoS")
+        modelname = "UMR-PRU-EoS"
+        if(usePR):
+           modelname = "PrEos"
+        neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).setModel(modelname)
         st.success('Successfully created fluid')
         st.subheader("Results:")
         thermoOps = jNeqSim.thermodynamicOperations.ThermodynamicOperations(neqsim_fluid)
-        thermoOps.calcPTphaseEnvelope()
+        thermoOps.calcPTphaseEnvelope2()
         fig, ax = plt.subplots()
         dewts = [x-273.15 for x in list(thermoOps.getOperation().get("dewT"))]
         dewps = list(thermoOps.getOperation().get("dewP"))
@@ -54,8 +59,9 @@ if st.button('Run'):
         plt.plot(bubts, bubps, label="bubble point")
         plt.title('PT envelope')
         plt.xlabel('Temperature [C]')
-        plt.ylabel('Pressure [bar]')
+        plt.ylabel('Pressure [bara]')
         plt.legend()
+        plt.grid(True)
         st.pyplot(fig)
         st.divider()
         cricobar = thermoOps.getOperation().get("cricondenbar")
@@ -63,13 +69,13 @@ if st.button('Run'):
         st.write('cricondentherm ', round(cricotherm[1],2), ' bara, ',  round(cricotherm[0]-273.15,2), ' C')
         st.write('cricondenbar ', round(cricobar[1],2), ' bara, ', round(cricobar[0]-273.15,2), ' C')
         dewdatapoints = pd.DataFrame(
-        {'dew temperatures': dewts,
-         'dew pressures':dewps,
+        {'dew temperatures [C]': dewts,
+         'dew pressures [bara]':dewps,
         }
         )
         bubdatapoints = pd.DataFrame(
-        {'bub temperatures': bubts,
-         'bub pressures':bubps,
+        {'bub temperatures [C]': bubts,
+         'bub pressures [bara]':bubps,
         }
         )
         st.divider()
