@@ -1,6 +1,6 @@
 import streamlit as st
 from neqsim.thermo import fluid
-from neqsim import jNeqSim
+from neqsim import jneqsim
 import pandas as pd
 from fluids import lng_fluid
 from neqsim.thermo.thermoTools import fluid_df
@@ -85,7 +85,7 @@ if st.button('Simulate Ageing'):
         fluid.setTemperature(-160.0, "C")  # setting a guessed initial temperature
         
         # Creating ship system for LNG ageing
-        ship = jNeqSim.fluidMechanics.flowSystem.twoPhaseFlowSystem.shipSystem.LNGship(fluid, volume_initial, BOR / 100.0)
+        ship = jneqsim.fluidmechanics.flowsystem.twophaseflowsystem.shipsystem.LNGship(fluid, volume_initial, BOR / 100.0)
         ship.useStandardVersion("", standard_version)
         ship.getStandardISO6976().setEnergyRefT(energy_ref_temp)
         ship.getStandardISO6976().setVolRefT(volume_ref_temp)
