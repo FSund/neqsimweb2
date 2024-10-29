@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import neqsim
 from neqsim.thermo import fluid_df, phaseenvelope, TPflash, dataFrame
-from neqsim import jNeqSim
+from neqsim import jneqsim
 import matplotlib.pyplot as plt
 from fluids import detailedHC_data
 
@@ -48,7 +48,7 @@ if st.button('Run'):
         neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).setModel(modelname)
         st.success('Successfully created fluid')
         st.subheader("Results:")
-        thermoOps = jNeqSim.thermodynamicOperations.ThermodynamicOperations(neqsim_fluid)
+        thermoOps = jneqsim.thermodynamicoperations.ThermodynamicOperations(neqsim_fluid)
         thermoOps.calcPTphaseEnvelope2()
         fig, ax = plt.subplots()
         dewts = [x-273.15 for x in list(thermoOps.getOperation().get("dewT"))]
