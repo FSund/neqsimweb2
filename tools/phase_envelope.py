@@ -12,6 +12,8 @@ st.title('Phase Envelope')
 NeqSim uses the UMR-PRU-EoS model for calculations of the phase envelope. The UMR-PRU-EoS is a predictive equation of state that combines the PR EoS with an original UNIFAC-type model for the excess Gibbs energy (GE), through the universal mixing rules (UMR). The model is called UMR-PRU (Universal Mixing Rule Peng Robinson UNIFAC) and it is an accurate model for calculation of cricondenbar and hydrocarbon dew points.
 """
 
+kelvin_to_celsius = 273.15
+
 st.text("Set fluid composition:")
 # Sample data for the DataFrame
 
@@ -33,9 +35,9 @@ st.edited_df = st.data_editor(
         ),
     },
 num_rows='dynamic')
-isplusfluid = st.checkbox('Plus Fluid')
+isplusfluid = st.checkbox('Last component is "plus" fraction (i.e. C6+)')
 
-usePR = st.checkbox('Peng Robinson EoS', help='use standard Peng Robinson EoS')
+# usePR = st.checkbox('Peng Robinson EoS', help='use standard Peng Robinson EoS')
 
 st.text("Fluid composition will be normalized before simulation")
 st.divider()
@@ -43,17 +45,15 @@ st.divider()
 if st.button('Run'):
     if st.edited_df['MolarComposition[-]'].sum() > 0:
         modelname = "UMR-PRU-EoS"
-        if(usePR):
-           modelname = "PrEos"
         neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).setModel(modelname)
         st.success('Successfully created fluid')
         st.subheader("Results:")
         thermoOps = jneqsim.thermodynamicoperations.ThermodynamicOperations(neqsim_fluid)
         thermoOps.calcPTphaseEnvelope2()
         fig, ax = plt.subplots()
-        dewts = [x-273.15 for x in list(thermoOps.getOperation().get("dewT"))]
+        dewts = [x - kelvin_to_celsius for x in list(thermoOps.getOperation().get("dewT"))]
         dewps = list(thermoOps.getOperation().get("dewP"))
-        bubts = [x-273.15 for x in list(thermoOps.getOperation().get("bubT"))]
+        bubts = [x - kelvin_to_celsius for x in list(thermoOps.getOperation().get("bubT"))]
         bubps = list(thermoOps.getOperation().get("bubP"))
         plt.plot(dewts,dewps, label="dew point")
         plt.plot(bubts, bubps, label="bubble point")
@@ -68,16 +68,14 @@ if st.button('Run'):
         cricotherm = thermoOps.getOperation().get("cricondentherm")
         st.write('cricondentherm ', round(cricotherm[1],2), ' bara, ',  round(cricotherm[0]-273.15,2), ' C')
         st.write('cricondenbar ', round(cricobar[1],2), ' bara, ', round(cricobar[0]-273.15,2), ' C')
-        dewdatapoints = pd.DataFrame(
-        {'dew temperatures [C]': dewts,
-         'dew pressures [bara]':dewps,
-        }
-        )
-        bubdatapoints = pd.DataFrame(
-        {'bub temperatures [C]': bubts,
-         'bub pressures [bara]':bubps,
-        }
-        )
+        dewdatapoints = pd.DataFrame({
+            'dew temperatures [C]': dewts,
+            'dew pressures [bara]':dewps,
+        })
+        bubdatapoints = pd.DataFrame({
+            'bub temperatures [C]': bubts,
+            'bub pressures [bara]':bubps,
+        })
         st.divider()
         st.write('dew points')
         st.data_editor(dewdatapoints)

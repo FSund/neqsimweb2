@@ -6,15 +6,23 @@ welcome = st.Page(
     icon=":material/home:"
 )
 
-tp_flash = st.Page("tools/0_TP_flash.py")
+tp_flash = st.Page("tools/tp_flash.py")
+phase_envelope = st.Page("tools/phase_envelope.py")
 
-phase_envelope = st.Page("tools/20_Phase_envelope.py")
+# simple
+pg = st.navigation([
+    welcome,
+    # tp_flash, 
+    phase_envelope,
+])
 
-pg = st.navigation({
-    "Welcome": [welcome], 
-    "Tools": [
-        tp_flash, 
-        phase_envelope,
-    ]
-})
+# with headers
+# pg = st.navigation({
+#     "Welcome": [welcome], 
+#     "Tools": [
+#         tp_flash, 
+#         phase_envelope,
+#     ]
+# })
+
 pg.run()
