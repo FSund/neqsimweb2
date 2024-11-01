@@ -3,5 +3,4 @@ altair
 pandas
 streamlit
 matplotlib
-openai
 xlsxwriter

@@ -97,18 +97,6 @@ if st.button('Run TP Flash Calculations'):
             #st.subheader('Combined TP Flash Results')
             #st.dataframe(combined_results)
             results_df = st.data_editor(combined_results)
-            st.divider()
-            list1 = neqsim_fluid.getComponentNames()
-            l1 = list(list1)
-            string_list = [str(element) for element in l1]
-            delimiter = ", "
-            result_string = delimiter.join(string_list)
-            try:
-                input = "What scientific experimental equilibrium data are available for mixtures of " + result_string + " at temperature around " + str(temp) + " Celsius and pressure around " + str(pressure) + " bar."
-                openapitext = st.make_request(input)
-                st.write(openapitext)
-            except:
-                st.write('OpenAI key needed for data analysis')
     else:
         st.error('The sum of Molar Composition must be greater than 0. Please adjust your inputs.')
         
