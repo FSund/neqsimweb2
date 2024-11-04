@@ -11,21 +11,27 @@ logger = logging.getLogger(__name__)
 
 st.title('Phase envelope')
 
-"""
-NeqSim uses the UMR-PRU-EoS model for calculations of the phase envelope. The UMR-PRU-EoS is a predictive equation of state that combines the PR EoS with an original UNIFAC-type model for the excess Gibbs energy (GE), through the universal mixing rules (UMR). The model is called UMR-PRU (Universal Mixing Rule Peng Robinson UNIFAC) and it is an accurate model for calculation of cricondenbar and hydrocarbon dew points.
-"""
+st.markdown("""
+NeqSim has several options for calculating the phase envelope. 
+
+- The UMR-PRU-EoS is a predictive equation of state that combines the PR EoS 
+with an original UNIFAC-type model for the excess Gibbs energy (GE), through the 
+universal mixing rules (UMR). The model is called UMR-PRU (Universal Mixing 
+Rule Peng Robinson UNIFAC) and it is an accurate model for calculation of 
+cricondenbar and hydrocarbon dew points.
+""")
 
 kelvin_to_celsius = 273.15
 
 st.header("Input")
 
 valid_systems = [
-    "pr-umr",
+    "UMR-PRU-EoS",
     "SRK-EoS",
     "PSRK-EoS",
 ]
 # st.subheader("System")
-st.selectbox("System", valid_systems, 
+model_name = st.selectbox("System", valid_systems, 
     # label_visibility="hidden",
 )
 
@@ -66,8 +72,13 @@ st.divider()
 
 if st.button('Run'):
     if st.edited_df['MolarComposition[-]'].sum() > 0:
-        modelname = "UMR-PRU-EoS"
-        neqsim_fluid = fluid_df(st.edited_df, lastIsPlusFraction=isplusfluid, add_all_components=False).setModel(modelname)
+        # modelname = "UMR-PRU-EoS"
+        neqsim_fluid = fluid_df(
+            st.edited_df, 
+            modelName=model_name,
+            lastIsPlusFraction=isplusfluid, 
+            add_all_components=False
+        )
         st.success('Successfully created fluid')
         st.subheader("Results:")
         thermoOps = jneqsim.thermodynamicoperations.ThermodynamicOperations(neqsim_fluid)
@@ -88,6 +99,7 @@ if st.button('Run'):
         st.divider()
         cricobar = thermoOps.getOperation().get("cricondenbar")
         cricotherm = thermoOps.getOperation().get("cricondentherm")
+        st.write(f"Model name \"{model_name}\"")
         st.write('cricondentherm ', round(cricotherm[1],2), ' bara, ',  round(cricotherm[0]-273.15,2), ' C')
         st.write('cricondenbar ', round(cricobar[1],2), ' bara, ', round(cricobar[0]-273.15,2), ' C')
         dewdatapoints = pd.DataFrame({
