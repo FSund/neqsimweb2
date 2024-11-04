@@ -2,6 +2,8 @@
 
 FROM python:3.12-slim
 
+ENV PYTHONDONTWRITEBYTECODE=1
+
 # create venv and add to path
 ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
@@ -11,11 +13,7 @@ WORKDIR /app
 COPY requirements.txt /app
 COPY packages.txt /app
 
-RUN apt-get update && apt-get install -y \
-        build-essential \
-        curl \
-        software-properties-common \
-        git \
+RUN apt-get update \
     && xargs apt install -y < packages.txt \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
