@@ -31,8 +31,11 @@ valid_systems = [
     "PSRK-EoS",
 ]
 # st.subheader("System")
+st.markdown("""
+Thermodynamic system and mixing rules
+""")
 model_name = st.selectbox("System", valid_systems, 
-    # label_visibility="hidden",
+    label_visibility="collapsed",
 )
 
 # st.text("Fluid composition")
