@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import neqsim
+import uuid
 import logging
 from neqsim.thermo import fluid_df, phaseenvelope, TPflash, dataFrame
 from neqsim import jneqsim
@@ -30,33 +31,41 @@ valid_systems = [
     "SRK-EoS",
     "PSRK-EoS",
 ]
+if 'model_name' not in st.session_state:
+    st.session_state.model_name = None
+
+model_name = st.session_state.model_name
+
 # st.subheader("System")
 st.markdown("""
 Thermodynamic system and mixing rules
 """)
-model_name = st.selectbox("System", valid_systems, 
+st.session_state.model_name = st.selectbox(
+    "System",
+    valid_systems, 
     label_visibility="collapsed",
+    index=valid_systems.index(model_name) if model_name in valid_systems else 0,
 )
 
-# st.text("Fluid composition")
-# st.markdown(
-"""
-Fluid composition
-"""
-# )
-# st.subheader("Fluid composition")
-
 # Sample data for the DataFrame
+
+# st.text("Fluid composition")
+st.markdown("""
+Fluid composition
+""")
 
 if 'activefluid_df' not in st.session_state or st.session_state.activefluid_name != 'detailedHC_data':
    st.session_state.activefluid_name = 'detailedHC_data'
    st.session_state.activefluid_df = pd.DataFrame(detailedHC_data)
 
-st.edited_df = st.data_editor(
+if 'df_editor_key' not in st.session_state:
+    st.session_state.df_editor_key = str(uuid.uuid4())
+
+edited_df = st.data_editor(
     st.session_state.activefluid_df,
     column_config={
         "ComponentName": "Component Name",
-        "MolarComposition[-]": st.column_config.NumberColumn(
+            "MolarComposition[-]": st.column_config.NumberColumn(
         ),
         "MolarMass[kg/mol]": st.column_config.NumberColumn(
             "Molar Mass [kg/mol]", min_value=0, max_value=10000, format="%f kg/mol"
@@ -65,8 +74,25 @@ st.edited_df = st.data_editor(
             "Density [gr/cm3]", min_value=1e-10, max_value=10.0, format="%f gr/cm3"
         ),
     },
-num_rows='dynamic')
-isplusfluid = st.checkbox('Last component is "plus" fraction (i.e. C6+)')
+    num_rows='dynamic',
+    key=st.session_state.df_editor_key,
+)
+
+def clear_composition(edf):
+    # Change the key of the data editor to start over.
+    st.session_state.df_editor_key = str(uuid.uuid4())
+
+st.button("Clear composition", on_click=clear_composition, args=(edited_df,))
+
+# st.subheader("Fluid composition")
+if 'isplusfluid' not in st.session_state:
+    st.session_state.isplusfluid = False
+
+st.session_state.isplusfluid = st.checkbox(
+    'Last component is "plus" fraction (i.e. C6+)',
+    value=st.session_state.isplusfluid
+)
+
 
 # usePR = st.checkbox('Peng Robinson EoS', help='use standard Peng Robinson EoS')
 
@@ -74,12 +100,12 @@ st.text("Fluid composition will be normalized before simulation")
 st.divider()
 
 if st.button('Run'):
-    if st.edited_df['MolarComposition[-]'].sum() > 0:
+    if edited_df['MolarComposition[-]'].sum() > 0:
         # modelname = "UMR-PRU-EoS"
         neqsim_fluid = fluid_df(
-            st.edited_df, 
+            edited_df, 
             modelName=model_name,
-            lastIsPlusFraction=isplusfluid, 
+            lastIsPlusFraction=st.session_state.isplusfluid, 
             add_all_components=False
         )
         st.success('Successfully created fluid')
