@@ -1,12 +1,15 @@
 import streamlit as st
 import pandas as pd
 import neqsim
+import logging
 from neqsim.thermo import fluid_df, phaseenvelope, TPflash, dataFrame
 from neqsim import jneqsim
 import matplotlib.pyplot as plt
 from fluids import detailedHC_data
 
-st.title('Phase Envelope')
+logger = logging.getLogger(__name__)
+
+st.title('Phase envelope')
 
 """
 NeqSim uses the UMR-PRU-EoS model for calculations of the phase envelope. The UMR-PRU-EoS is a predictive equation of state that combines the PR EoS with an original UNIFAC-type model for the excess Gibbs energy (GE), through the universal mixing rules (UMR). The model is called UMR-PRU (Universal Mixing Rule Peng Robinson UNIFAC) and it is an accurate model for calculation of cricondenbar and hydrocarbon dew points.
@@ -14,7 +17,26 @@ NeqSim uses the UMR-PRU-EoS model for calculations of the phase envelope. The UM
 
 kelvin_to_celsius = 273.15
 
-st.text("Set fluid composition:")
+st.header("Input")
+
+valid_systems = [
+    "pr-umr",
+    "SRK-EoS",
+    "PSRK-EoS",
+]
+# st.subheader("System")
+st.selectbox("System", valid_systems, 
+    # label_visibility="hidden",
+)
+
+# st.text("Fluid composition")
+# st.markdown(
+"""
+Fluid composition
+"""
+# )
+# st.subheader("Fluid composition")
+
 # Sample data for the DataFrame
 
 if 'activefluid_df' not in st.session_state or st.session_state.activefluid_name != 'detailedHC_data':
