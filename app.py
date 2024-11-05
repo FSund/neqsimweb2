@@ -13,38 +13,18 @@ def setup_logging():
     stream_handler.setLevel(logging.INFO)
     
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.INFO,  # root logger level
         format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
+        handlers=[  # handlers to add to the root logger
             logging.FileHandler("debug.log"),
             stream_handler,
             sql_handler,
         ]
     )
-    
-    # test just file handler
-    # logging.basicConfig(
-    #     level=logging.INFO,
-    #     format="%(asctime)s [%(levelname)s] %(message)s",
-    #     handlers=[logging.FileHandler("debug.log")],
-    #     force=True
-    # )
 
-    # logging.info("Testing FileHandler")
-    
-    # sql_handler = SQLAlchemyHandler()
-    # logging.basicConfig(
-    #     level=logging.INFO,
-    #     format="%(asctime)s [%(levelname)s] %(message)s",
-    #     handlers=[sql_handler],
-    #     force=True
-    # )
-
-    # logging.info("Testing SQLAlchemyHandler")
 
 if __name__ == "__main__":
     setup_logging()
-    logger.setLevel(logging.INFO)
     logger.info("App started")
     
     welcome = st.Page(
