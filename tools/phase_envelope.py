@@ -54,6 +54,12 @@ st.markdown("""
 Fluid composition
 """)
 
+def clear_composition(edf):
+    # Change the key of the data editor to start over.
+    st.session_state.df_editor_key = str(uuid.uuid4())
+
+st.button("Clear composition", on_click=clear_composition)
+
 if 'activefluid_df' not in st.session_state or st.session_state.activefluid_name != 'detailedHC_data':
    st.session_state.activefluid_name = 'detailedHC_data'
    st.session_state.activefluid_df = pd.DataFrame(detailedHC_data)
@@ -78,71 +84,69 @@ edited_df = st.data_editor(
     key=st.session_state.df_editor_key,
 )
 
-def clear_composition(edf):
-    # Change the key of the data editor to start over.
-    st.session_state.df_editor_key = str(uuid.uuid4())
-
-st.button("Clear composition", on_click=clear_composition, args=(edited_df,))
-
 # st.subheader("Fluid composition")
 if 'isplusfluid' not in st.session_state:
     st.session_state.isplusfluid = False
 
-st.session_state.isplusfluid = st.checkbox(
+st.checkbox(
     'Last component is "plus" fraction (i.e. C6+)',
-    value=st.session_state.isplusfluid
+    value=st.session_state.isplusfluid,
+    on_change=lambda: st.session_state.update({'isplusfluid': not st.session_state.isplusfluid})
 )
-
 
 # usePR = st.checkbox('Peng Robinson EoS', help='use standard Peng Robinson EoS')
 
 st.text("Fluid composition will be normalized before simulation")
 st.divider()
 
-if st.button('Run'):
-    if edited_df['MolarComposition[-]'].sum() > 0:
-        # modelname = "UMR-PRU-EoS"
-        neqsim_fluid = fluid_df(
-            edited_df, 
-            modelName=model_name,
-            lastIsPlusFraction=st.session_state.isplusfluid, 
-            add_all_components=False
-        )
-        st.success('Successfully created fluid')
-        st.subheader("Results:")
-        thermoOps = jneqsim.thermodynamicoperations.ThermodynamicOperations(neqsim_fluid)
-        thermoOps.calcPTphaseEnvelope2()
-        fig, ax = plt.subplots()
-        dewts = [x - kelvin_to_celsius for x in list(thermoOps.getOperation().get("dewT"))]
-        dewps = list(thermoOps.getOperation().get("dewP"))
-        bubts = [x - kelvin_to_celsius for x in list(thermoOps.getOperation().get("bubT"))]
-        bubps = list(thermoOps.getOperation().get("bubP"))
-        plt.plot(dewts,dewps, label="dew point")
-        plt.plot(bubts, bubps, label="bubble point")
-        plt.title('PT envelope')
-        plt.xlabel('Temperature [C]')
-        plt.ylabel('Pressure [bara]')
-        plt.legend()
-        plt.grid(True)
-        st.pyplot(fig)
-        st.divider()
-        cricobar = thermoOps.getOperation().get("cricondenbar")
-        cricotherm = thermoOps.getOperation().get("cricondentherm")
-        st.write(f"Model name \"{model_name}\"")
-        st.write('cricondentherm ', round(cricotherm[1],2), ' bara, ',  round(cricotherm[0]-273.15,2), ' C')
-        st.write('cricondenbar ', round(cricobar[1],2), ' bara, ', round(cricobar[0]-273.15,2), ' C')
-        dewdatapoints = pd.DataFrame({
-            'dew temperatures [C]': dewts,
-            'dew pressures [bara]':dewps,
-        })
-        bubdatapoints = pd.DataFrame({
-            'bub temperatures [C]': bubts,
-            'bub pressures [bara]':bubps,
-        })
-        st.divider()
-        st.write('dew points')
-        st.data_editor(dewdatapoints)
-        st.write('bubble points')
-        st.data_editor(bubdatapoints)
-    else:
-        st.error('The sum of Molar Composition must be greater than 0. Please adjust your inputs.')
+composition_ok = edited_df['MolarComposition[-]'].sum() > 0
+if st.button('Run', type="primary", disabled=not composition_ok):
+    # modelname = "UMR-PRU-EoS"
+    neqsim_fluid = fluid_df(
+        edited_df, 
+        modelName=model_name,
+        lastIsPlusFraction=st.session_state.isplusfluid, 
+        add_all_components=False
+    )
+    st.success('Successfully created fluid')
+    st.subheader("Results:")
+    thermoOps = jneqsim.thermodynamicoperations.ThermodynamicOperations(neqsim_fluid)
+    thermoOps.calcPTphaseEnvelope2()
+    fig, ax = plt.subplots()
+    dewts = [x - kelvin_to_celsius for x in list(thermoOps.getOperation().get("dewT"))]
+    dewps = list(thermoOps.getOperation().get("dewP"))
+    bubts = [x - kelvin_to_celsius for x in list(thermoOps.getOperation().get("bubT"))]
+    bubps = list(thermoOps.getOperation().get("bubP"))
+    plt.plot(dewts,dewps, label="dew point")
+    plt.plot(bubts, bubps, label="bubble point")
+    plt.title('PT envelope')
+    plt.xlabel('Temperature [C]')
+    plt.ylabel('Pressure [bara]')
+    plt.legend()
+    plt.grid(True)
+    st.pyplot(fig)
+    st.divider()
+    cricobar = thermoOps.getOperation().get("cricondenbar")
+    cricotherm = thermoOps.getOperation().get("cricondentherm")
+    st.write(f"Model name \"{model_name}\"")
+    st.write('cricondentherm ', round(cricotherm[1],2), ' bara, ',  round(cricotherm[0]-273.15,2), ' C')
+    st.write('cricondenbar ', round(cricobar[1],2), ' bara, ', round(cricobar[0]-273.15,2), ' C')
+    dewdatapoints = pd.DataFrame({
+        'dew temperatures [C]': dewts,
+        'dew pressures [bara]':dewps,
+    })
+    bubdatapoints = pd.DataFrame({
+        'bub temperatures [C]': bubts,
+        'bub pressures [bara]':bubps,
+    })
+    st.divider()
+    st.write('dew points')
+    st.data_editor(dewdatapoints)
+    st.write('bubble points')
+    st.data_editor(bubdatapoints)
+
+if not composition_ok:
+    # st.markdown("""
+    # *The sum of Molar Composition must be greater than 0. Please adjust your inputs.*
+    # """)
+    st.error('The sum of Molar Composition must be greater than 0. Please adjust your inputs.')
