@@ -1,6 +1,6 @@
 altair
 pandas
-streamlit
+streamlit==1.39.*
 matplotlib
 xlsxwriter
 SQLAlchemy
