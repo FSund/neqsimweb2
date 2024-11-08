@@ -26,10 +26,12 @@ kelvin_to_celsius = 273.15
 
 st.header("Input")
 
+# docs: https://htmlpreview.github.io/?https://raw.githubusercontent.com/equinor/neqsimhome/master/javadoc/site/apidocs/neqsim/thermo/system/package-summary.html
+# more docs: https://github.com/equinor/neqsim-python/blob/d9f886ec189950f797caa0e0fc30303efb4fef66/src/neqsim/thermo/thermoTools.py#L285
 valid_systems = [
     "UMR-PRU-EoS",
     "SRK-EoS",
-    "PSRK-EoS",
+    "SRK-Peneloux-EoS",
 ]
 if 'model_name' not in st.session_state:
     st.session_state.model_name = None
@@ -112,6 +114,7 @@ if st.button('Run', type="primary", disabled=not composition_ok):
     st.subheader("Results:")
     thermoOps = jneqsim.thermodynamicoperations.ThermodynamicOperations(neqsim_fluid)
     thermoOps.calcPTphaseEnvelope2()
+    logger.info(f"Calculated phase envelope using {model_name}")
     fig, ax = plt.subplots()
     dewts = [x - kelvin_to_celsius for x in list(thermoOps.getOperation().get("dewT"))]
     dewps = list(thermoOps.getOperation().get("dewP"))
