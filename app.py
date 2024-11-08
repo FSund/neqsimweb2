@@ -45,6 +45,10 @@ if __name__ == "__main__":
         "welcome/logs.py",
         title="Logs",
     )
+    changelog = st.Page(
+        "welcome/changelog.py",
+        title="Changelog",
+    )
 
     # simple
     pg = st.navigation([
@@ -52,6 +56,7 @@ if __name__ == "__main__":
         # tp_flash, 
         phase_envelope,
         logs,
+        changelog,
     ])
 
     # with headers
